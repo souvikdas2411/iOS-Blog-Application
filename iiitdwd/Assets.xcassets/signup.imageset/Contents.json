@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "blurry-gradient-haikei.png",
+      "filename" : "blob-scene-haikei-3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "blurry-gradient-haikei-1.png",
+      "filename" : "blob-scene-haikei-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "blurry-gradient-haikei-2.png",
+      "filename" : "blob-scene-haikei-4.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
