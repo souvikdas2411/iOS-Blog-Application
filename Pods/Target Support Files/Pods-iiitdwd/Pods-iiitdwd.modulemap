@@ -1,0 +1,6 @@
+framework module Pods_iiitdwd {
+  umbrella header "Pods-iiitdwd-umbrella.h"
+
+  export *
+  module * { export * }
+}
