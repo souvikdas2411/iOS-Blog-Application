@@ -29,6 +29,7 @@
 		4F4941092721E0FD001F52E7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4941082721E0FD001F52E7 /* Extensions.swift */; };
 		4F49410B2721EA11001F52E7 /* SignInHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */; };
 		4F49410D2721F699001F52E7 /* SignUpHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */; };
+		4F49410F27220053001F52E7 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410E27220053001F52E7 /* ProfileHeaderView.swift */; };
 		EA1200AF7EABF2D0876CDE02 /* Pods_iiitdwd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		4F4941082721E0FD001F52E7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHeaderView.swift; sourceTree = "<group>"; };
 		4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpHeaderView.swift; sourceTree = "<group>"; };
+		4F49410E27220053001F52E7 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		DC7CEE484454865D5EF383DB /* Pods-iiitdwd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iiitdwd.release.xcconfig"; path = "Target Support Files/Pods-iiitdwd/Pods-iiitdwd.release.xcconfig"; sourceTree = "<group>"; };
 		F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iiitdwd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -138,6 +140,7 @@
 			children = (
 				4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */,
 				4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */,
+				4F49410E27220053001F52E7 /* ProfileHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				4F4940F62721C2A4001F52E7 /* DatabaseManager.swift in Sources */,
 				4F4940EE2721C25E001F52E7 /* SignUpViewController.swift in Sources */,
 				4F4940EC2721C24E001F52E7 /* SigninViewController.swift in Sources */,
+				4F49410F27220053001F52E7 /* ProfileHeaderView.swift in Sources */,
 				4F4940CE27219D2B001F52E7 /* AppDelegate.swift in Sources */,
 				4F4941012721D872001F52E7 /* User.swift in Sources */,
 				4F4940E82721C1DA001F52E7 /* ProfileViewController.swift in Sources */,

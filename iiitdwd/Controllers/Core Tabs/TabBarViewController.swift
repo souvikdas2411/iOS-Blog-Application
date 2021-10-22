@@ -17,9 +17,12 @@ class TabBarViewController: UITabBarController {
     
 
     private func setUpControllers() {
+        guard let currentUserEmail = UserDefaults.standard.string(forKey: "email") else {
+            return
+        }
         let home = ViewController()
         home.title = "Home"
-        let profile = ProfileViewController()
+        let profile = ProfileViewController(currentEmail: currentUserEmail)
         profile.title = "Profile"
         
         home.navigationItem.largeTitleDisplayMode = .always
@@ -33,6 +36,11 @@ class TabBarViewController: UITabBarController {
         
         nav1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 1)
         nav2.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 2)
+        
+        tabBar.backgroundColor = .white
+//        tabBar.layer.cornerRadius = 30
+//        tabBar.tintColor = .s
+        
         
         setViewControllers([nav1, nav2], animated: true)
     }

@@ -13,6 +13,8 @@ class SigninViewController: UITabBarController {
     
     private let emailField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.keyboardType = .emailAddress
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
@@ -25,6 +27,8 @@ class SigninViewController: UITabBarController {
     
     private let passwordField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.isSecureTextEntry = true
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
@@ -94,6 +98,36 @@ class SigninViewController: UITabBarController {
     }
     
     @objc func didTapSignIn() {
+        guard let email = emailField.text, !email.isEmpty,
+              let password = passwordField.text, !password.isEmpty else {
+                  let dialogMessage = UIAlertController(title: "Alert", message: "Please fill the details!", preferredStyle: .alert)
+                  let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
+                      self.passwordField.text = ""
+                  })
+                  dialogMessage.addAction(ok)
+                  self.present(dialogMessage, animated: true, completion: nil)
+                  return
+              }
+        
+        AuthManager.shared.signIn(email: email, password: password){ [weak self] success in
+            if success {
+                DispatchQueue.main.async {
+                    UserDefaults.standard.set(email, forKey: "email")
+                    let vc = TabBarViewController()
+                    vc.modalPresentationStyle = .fullScreen
+                    self?.present(vc, animated: true)
+                }
+            }
+            else {
+                let dialogMessage = UIAlertController(title: "Alert", message: "Something went wrong!", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
+                    self?.passwordField.text = ""
+                })
+                dialogMessage.addAction(ok)
+                self?.present(dialogMessage, animated: true, completion: nil)
+            }
+            
+        }
         
     }
     

@@ -24,6 +24,8 @@ class SignUpViewController: UITabBarController {
     
     private let emailField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.keyboardType = .emailAddress
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
@@ -36,6 +38,8 @@ class SignUpViewController: UITabBarController {
     
     private let passwordField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.isSecureTextEntry = true
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
@@ -48,6 +52,8 @@ class SignUpViewController: UITabBarController {
     
     private let repeatPasswordField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.isSecureTextEntry = true
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
@@ -102,15 +108,46 @@ class SignUpViewController: UITabBarController {
     }
     
     @objc func didTapSignUp() {
+        guard let email = emailField.text, !email.isEmpty,
+              let password = passwordField.text, !password.isEmpty,
+              let checkPass = repeatPasswordField.text, !checkPass.isEmpty,
+              let name = fullName.text, !name.isEmpty, password == checkPass  else {
+                  let dialogMessage = UIAlertController(title: "Alert", message: "Please fill the details correctly!", preferredStyle: .alert)
+                  let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
+                      self.passwordField.text = ""
+                  })
+                  dialogMessage.addAction(ok)
+                  self.present(dialogMessage, animated: true, completion: nil)
+                  return
+              }
         
+        AuthManager.shared.signUp(email: email, password: password){ [weak self] success in
+            if success {
+                let newUser = User(name: name, email: email, profilePictureRef: nil)
+                DatabaseManager.shared.insetUser(with: newUser){ inserted in
+                    guard inserted else {
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        UserDefaults.standard.set(email, forKey: "email")
+                        UserDefaults.standard.set(name, forKey: "name")
+                        let vc = TabBarViewController()
+                        vc.modalPresentationStyle = .fullScreen
+                        self?.present(vc, animated: true)
+                    }
+                }
+            } else {
+                let dialogMessage = UIAlertController(title: "Alert", message: "Something went wrong!", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
+                    self?.passwordField.text = ""
+                })
+                dialogMessage.addAction(ok)
+                self?.present(dialogMessage, animated: true, completion: nil)
+            }
+        }
     }
     
-    @objc func didTapCreateAccount() {
-        let vc = SignUpViewController()
-        vc.title = "Sign Up"
-        navigationController?.pushViewController(vc, animated: true)
-    }
-
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }

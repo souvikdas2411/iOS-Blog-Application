@@ -10,5 +10,5 @@ import Foundation
 struct User {
     let name: String
     let email: String
-    let profilePictureUrl: String?
+    let profilePictureRef: String?
 }
