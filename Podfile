@@ -12,5 +12,6 @@ target 'iiitdwd' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'Purchases'
+  pod 'SDWebImage'
 
 end

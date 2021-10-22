@@ -11,6 +11,6 @@ struct BlogPost {
     let identifier: String
     let title: String
     let timestamp: TimeInterval
-    let text: String
     let headerImageUrl: URL?
+    let text: String
 }

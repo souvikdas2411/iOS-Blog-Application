@@ -339,6 +339,9 @@ PODS:
   - Purchases (3.12.8):
     - PurchasesCoreSwift (= 3.12.8)
   - PurchasesCoreSwift (3.12.8)
+  - SDWebImage (5.10.4):
+    - SDWebImage/Core (= 5.10.4)
+  - SDWebImage/Core (5.10.4)
 
 DEPENDENCIES:
   - Firebase/Analytics
@@ -347,6 +350,7 @@ DEPENDENCIES:
   - Firebase/Firestore
   - Firebase/Storage
   - Purchases
+  - SDWebImage
 
 SPEC REPOS:
   trunk:
@@ -371,6 +375,7 @@ SPEC REPOS:
     - PromisesObjC
     - Purchases
     - PurchasesCoreSwift
+    - SDWebImage
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -394,7 +399,8 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Purchases: 4e410d75f18b544aba8aa41ddc4bffbf8e787246
   PurchasesCoreSwift: 93fa64c1a70e7f493f54aba64e01ff42d1ed9109
+  SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
 
-PODFILE CHECKSUM: 38187552a6cd2fea4278886432b7c525e00fab70
+PODFILE CHECKSUM: 5e29aa6eca9db44f597db2768df33a9cc9e07f04
 
 COCOAPODS: 1.11.2

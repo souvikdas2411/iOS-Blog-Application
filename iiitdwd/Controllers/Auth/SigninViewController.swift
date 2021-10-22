@@ -57,6 +57,15 @@ class SigninViewController: UITabBarController {
         return button
     }()
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.isHidden = true
+        indicator.style = .large
+        indicator.backgroundColor = .separator
+        indicator.layer.cornerRadius = 30
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -80,6 +89,7 @@ class SigninViewController: UITabBarController {
         view.addSubview(passwordField)
         view.addSubview(signInButton)
         view.addSubview(createAccountButton)
+        view.addSubview(activityIndicator)
         
         signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         createAccountButton.addTarget(self, action: #selector(didTapCreateAccount), for: .touchUpInside)
@@ -94,10 +104,12 @@ class SigninViewController: UITabBarController {
         passwordField.frame = CGRect(x: 20, y: emailField.bottom + 10, width: view.width - 40, height: 50)
         signInButton.frame = CGRect(x: view.width/2 - ((view.width/3)/2), y: passwordField.bottom + 20, width: view.width/3, height: 50)
         createAccountButton.frame = CGRect(x: view.width/2 - ((view.width/5)/2), y: signInButton.bottom + 10, width: view.width/5, height: 50)
+        activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
         
     }
     
     @objc func didTapSignIn() {
+        
         guard let email = emailField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty else {
                   let dialogMessage = UIAlertController(title: "Alert", message: "Please fill the details!", preferredStyle: .alert)
@@ -109,9 +121,14 @@ class SigninViewController: UITabBarController {
                   return
               }
         
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
         AuthManager.shared.signIn(email: email, password: password){ [weak self] success in
             if success {
                 DispatchQueue.main.async {
+                    self!.activityIndicator.isHidden = true
+                    self!.activityIndicator.stopAnimating()
                     UserDefaults.standard.set(email, forKey: "email")
                     let vc = TabBarViewController()
                     vc.modalPresentationStyle = .fullScreen
@@ -119,6 +136,8 @@ class SigninViewController: UITabBarController {
                 }
             }
             else {
+                self!.activityIndicator.isHidden = true
+                self!.activityIndicator.stopAnimating()
                 let dialogMessage = UIAlertController(title: "Alert", message: "Something went wrong!", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
                     self?.passwordField.text = ""

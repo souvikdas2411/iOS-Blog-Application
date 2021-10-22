@@ -30,6 +30,12 @@
 		4F49410B2721EA11001F52E7 /* SignInHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */; };
 		4F49410D2721F699001F52E7 /* SignUpHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */; };
 		4F49410F27220053001F52E7 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410E27220053001F52E7 /* ProfileHeaderView.swift */; };
+		4F49411127232123001F52E7 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411027232123001F52E7 /* HapticsManager.swift */; };
+		4F49411327232557001F52E7 /* CreatePostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411227232557001F52E7 /* CreatePostHeaderView.swift */; };
+		4F49411627232E64001F52E7 /* PostPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411527232E64001F52E7 /* PostPreviewTableViewCell.swift */; };
+		4F49411827232E92001F52E7 /* PostHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411727232E92001F52E7 /* PostHeaderTableViewCell.swift */; };
+		4F49411A272333F7001F52E7 /* ViewerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F494119272333F7001F52E7 /* ViewerHeaderView.swift */; };
+		4F49411C2723387B001F52E7 /* ViewControllerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */; };
 		EA1200AF7EABF2D0876CDE02 /* Pods_iiitdwd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +66,12 @@
 		4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHeaderView.swift; sourceTree = "<group>"; };
 		4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpHeaderView.swift; sourceTree = "<group>"; };
 		4F49410E27220053001F52E7 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		4F49411027232123001F52E7 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		4F49411227232557001F52E7 /* CreatePostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostHeaderView.swift; sourceTree = "<group>"; };
+		4F49411527232E64001F52E7 /* PostPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewTableViewCell.swift; sourceTree = "<group>"; };
+		4F49411727232E92001F52E7 /* PostHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		4F494119272333F7001F52E7 /* ViewerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerHeaderView.swift; sourceTree = "<group>"; };
+		4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerHeaderView.swift; sourceTree = "<group>"; };
 		DC7CEE484454865D5EF383DB /* Pods-iiitdwd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iiitdwd.release.xcconfig"; path = "Target Support Files/Pods-iiitdwd/Pods-iiitdwd.release.xcconfig"; sourceTree = "<group>"; };
 		F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iiitdwd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -138,9 +150,13 @@
 		4F4940E22721BFF1001F52E7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4F49411427232E4A001F52E7 /* Cells */,
 				4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */,
 				4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */,
 				4F49410E27220053001F52E7 /* ProfileHeaderView.swift */,
+				4F49411227232557001F52E7 /* CreatePostHeaderView.swift */,
+				4F494119272333F7001F52E7 /* ViewerHeaderView.swift */,
+				4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -164,6 +180,7 @@
 				4F4940F52721C2A4001F52E7 /* DatabaseManager.swift */,
 				4F4940F72721C2B5001F52E7 /* AuthManager.swift */,
 				4F4940F92721C2C0001F52E7 /* StorageManager.swift */,
+				4F49411027232123001F52E7 /* HapticsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -212,6 +229,15 @@
 				4F4941082721E0FD001F52E7 /* Extensions.swift */,
 			);
 			path = Others;
+			sourceTree = "<group>";
+		};
+		4F49411427232E4A001F52E7 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4F49411527232E64001F52E7 /* PostPreviewTableViewCell.swift */,
+				4F49411727232E92001F52E7 /* PostHeaderTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,11 +359,15 @@
 				4F4940D227219D2B001F52E7 /* ViewController.swift in Sources */,
 				4F49410D2721F699001F52E7 /* SignUpHeaderView.swift in Sources */,
 				4F4940F82721C2B5001F52E7 /* AuthManager.swift in Sources */,
+				4F49411A272333F7001F52E7 /* ViewerHeaderView.swift in Sources */,
 				4F4940F62721C2A4001F52E7 /* DatabaseManager.swift in Sources */,
 				4F4940EE2721C25E001F52E7 /* SignUpViewController.swift in Sources */,
+				4F49411627232E64001F52E7 /* PostPreviewTableViewCell.swift in Sources */,
 				4F4940EC2721C24E001F52E7 /* SigninViewController.swift in Sources */,
+				4F49411C2723387B001F52E7 /* ViewControllerHeaderView.swift in Sources */,
 				4F49410F27220053001F52E7 /* ProfileHeaderView.swift in Sources */,
 				4F4940CE27219D2B001F52E7 /* AppDelegate.swift in Sources */,
+				4F49411127232123001F52E7 /* HapticsManager.swift in Sources */,
 				4F4941012721D872001F52E7 /* User.swift in Sources */,
 				4F4940E82721C1DA001F52E7 /* ProfileViewController.swift in Sources */,
 				4F4940F22721C279001F52E7 /* CreateNewPostViewController.swift in Sources */,
@@ -345,10 +375,12 @@
 				4F4940EA2721C232001F52E7 /* TabBarViewController.swift in Sources */,
 				4F4940D027219D2B001F52E7 /* SceneDelegate.swift in Sources */,
 				4F49410B2721EA11001F52E7 /* SignInHeaderView.swift in Sources */,
+				4F49411827232E92001F52E7 /* PostHeaderTableViewCell.swift in Sources */,
 				4F4940F02721C26B001F52E7 /* ViewPostViewController.swift in Sources */,
 				4F4941092721E0FD001F52E7 /* Extensions.swift in Sources */,
 				4F4940FA2721C2C0001F52E7 /* StorageManager.swift in Sources */,
 				4F4941062721DDF7001F52E7 /* PayWallViewController.swift in Sources */,
+				4F49411327232557001F52E7 /* CreatePostHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-
+    
     
     let currentEmail: String
     
@@ -17,10 +17,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private let headerView = ProfileHeaderView()
     
+    private let refreshControl = UIRefreshControl()
+    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
         tableView.backgroundColor = nil
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(PostPreviewTableViewCell.self,
+                                   forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
         return tableView
     }()
     
@@ -37,19 +40,24 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("------------------------------")
-        print(self.tabBarController?.tabBar.frame.height.description)
-        
         view.backgroundColor = .systemBackground
         //        title = currentEmail
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .done, target: self, action: #selector(didTapSignOut))
+        navigationItem.rightBarButtonItem?.tintColor = .white
         
         view.addSubview(headerView)
         view.addSubview(tableView)
         
         tableView.delegate = self
         tableView.dataSource = self
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(didRefresh), for: .valueChanged)
+        fetchPosts()
         setUpTableHeader()
         fetchProfileData()
         
@@ -69,7 +77,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         headerView.isUserInteractionEnabled = true
         tableView.tableHeaderView = headerView
         
-        let profilePhoto = UIImageView(image: UIImage(systemName: "person.circle"))
+        let profilePhoto = UIImageView()
         profilePhoto.isUserInteractionEnabled = true
         profilePhoto.tintColor = .white
         profilePhoto.backgroundColor = .white
@@ -80,6 +88,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                                     y: headerView.height/2 - 50,
                                     width: 100,
                                     height: 100)
+        
+        let activityIndicator: UIActivityIndicatorView = {
+            let indicator = UIActivityIndicatorView()
+            indicator.isHidden = false
+            indicator.startAnimating()
+            indicator.style = .large
+            indicator.backgroundColor = .separator
+            indicator.layer.cornerRadius = 30
+            indicator.frame = CGRect(x: view.width/2 - 30, y: headerView.height/2 - 30, width: 60, height: 60)
+            return indicator
+        }()
         
         let emailLabel = UILabel(frame: CGRect(x: 0,
                                                y: profilePhoto.bottom + 10,
@@ -99,11 +118,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 guard let url = url else {
                     return
                 }
+                activityIndicator.isHidden = false
+                activityIndicator.startAnimating()
                 let task = URLSession.shared.dataTask(with: url) { data, _, _ in
                     guard let data = data else {
+                        //                        ivityIndicator.isHidden = true
+                        //                        activityIndicator.startAnimating()
                         return
                     }
                     DispatchQueue.main.async {
+                        activityIndicator.isHidden = true
+                        activityIndicator.stopAnimating()
                         profilePhoto.image = UIImage(data: data)
                     }
                 }
@@ -114,103 +139,161 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         headerView.addSubview(emailLabel)
         headerView.addSubview(profilePhoto)
+        headerView.addSubview(activityIndicator)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapProfilePhoto))
         profilePhoto.addGestureRecognizer(tap)
     }
     
-    private func fetchProfileData() {
-        DatabaseManager.shared.getUser(email: currentEmail) { [weak self] user in
-            guard let user = user else {
+    @objc private func didRefresh() {
+        fetchPosts()
+    }
+    
+    @objc private func didTapProfilePhoto() {
+            guard let myEmail = UserDefaults.standard.string(forKey: "email"),
+                  myEmail == currentEmail else {
                 return
             }
-            self?.user = user
-            DispatchQueue.main.async {
-                self?.setUpTableHeader(profilePhotoRef: user.profilePictureRef, name: user.name)
-            }
-        }
-    }
-    
-    @objc private func didTapSignOut() {
-        
-        let sheet = UIAlertController(title: "Sign Out", message: "Are you sure you'd like to sign out?", preferredStyle: .actionSheet)
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        sheet.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: {_ in
-            AuthManager.shared.signOut{ [weak self] success in
-                if success {
-                    DispatchQueue.main.async {
-                        
-                        UserDefaults.standard.set(nil, forKey: "email")
-                        UserDefaults.standard.set(nil, forKey: "name")
-                        
-                        SigninViewController().navigationItem.largeTitleDisplayMode = .always
-                        let navVC = UINavigationController(rootViewController: SigninViewController())
-                        navVC.navigationBar.prefersLargeTitles = true
-                        navVC.modalPresentationStyle = .fullScreen
-                        self?.present(navVC, animated: true, completion: nil)
-                    }
-                }
-                else {
-                    
-                }
-            }
-        }))
-        
-        present(sheet, animated: true, completion: nil)
-        
-    }
-    
-    @objc private func didTapProfilePhoto(){
-        guard let myEmail = UserDefaults.standard.string(forKey: "email"),
-              myEmail == currentEmail else {
-                  return
-              }
-        
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.delegate = self
-        picker.allowsEditing = true
-        present(picker, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Blog Post"
-        cell.backgroundColor = .separator
-        return cell
-    }
-}
 
-extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        guard let image = info[.editedImage] as? UIImage else {
-            return
+            let picker = UIImagePickerController()
+            picker.sourceType = .photoLibrary
+            picker.delegate = self
+            picker.allowsEditing = true
+            present(picker, animated: true)
         }
-        
-        StorageManager.shared.uploadUserProfilePicture(
-            email: currentEmail,
-            image: image
-        ) { [weak self] success in
-            guard let strongSelf = self else { return }
-            if success {
-                DatabaseManager.shared.updateProfilePhoto(email: strongSelf.currentEmail) { updated in
-                    guard updated else {
-                        return
+
+        private func fetchProfileData() {
+            DatabaseManager.shared.getUser(email: currentEmail) { [weak self] user in
+                guard let user = user else {
+                    return
+                }
+                self?.user = user
+
+                DispatchQueue.main.async {
+                    self?.setUpTableHeader(
+                        profilePhotoRef: user.profilePictureRef,
+                        name: user.name
+                    )
+                }
+            }
+        }
+
+        private func setUpSignOutButton() {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "Sign Out",
+                style: .done,
+                target: self,
+                action: #selector(didTapSignOut)
+            )
+        }
+
+        /// Sign Out
+        @objc private func didTapSignOut() {
+            let sheet = UIAlertController(title: "Sign Out", message: "Are you sure you'd like to sign out?", preferredStyle: .actionSheet)
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            sheet.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { _ in
+                AuthManager.shared.signOut { [weak self] success in
+                    if success {
+                        DispatchQueue.main.async {
+                            UserDefaults.standard.set(nil, forKey: "email")
+                            UserDefaults.standard.set(nil, forKey: "name")
+                            UserDefaults.standard.set(false, forKey: "premium")
+
+                            let signInVC = SigninViewController()
+                            signInVC.navigationItem.largeTitleDisplayMode = .always
+
+                            let navVC = UINavigationController(rootViewController: signInVC)
+                            navVC.navigationBar.prefersLargeTitles = true
+                            navVC.modalPresentationStyle = .fullScreen
+                            self?.present(navVC, animated: true, completion: nil)
+                        }
                     }
-                    DispatchQueue.main.async {
-                        strongSelf.fetchProfileData()
+                }
+            }))
+            present(sheet, animated: true)
+        }
+
+        // TableView
+        private var posts: [BlogPost] = []
+
+        private func fetchPosts() {
+            print("Fetching posts...")
+
+            DatabaseManager.shared.getPosts(for: currentEmail) { [weak self] posts in
+                self?.posts = posts
+                print("Found \(posts.count) posts")
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                    self?.refreshControl.endRefreshing()
+                }
+            }
+        }
+
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return posts.count
+        }
+
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let post = posts[indexPath.row]
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
+                fatalError()
+            }
+            cell.configure(with: .init(title: post.title, imageUrl: post.headerImageUrl))
+            cell.backgroundColor = .separator
+            return cell
+        }
+
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 100
+        }
+
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            tableView.deselectRow(at: indexPath, animated: true)
+
+            HapticsManager.shared.vibrateForSelection()
+
+
+            
+                // Our post
+                let vc = ViewPostViewController(
+                    post: posts[indexPath.row]
+                )
+                vc.navigationItem.largeTitleDisplayMode = .never
+                vc.title = "Post"
+                navigationController?.pushViewController(vc, animated: true)
+
+            
+        }
+
+    }
+
+    extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            picker.dismiss(animated: true, completion: nil)
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            picker.dismiss(animated: true, completion: nil)
+            guard let image = info[.editedImage] as? UIImage else {
+                return
+            }
+
+            StorageManager.shared.uploadUserProfilePicture(
+                email: currentEmail,
+                image: image
+            ) { [weak self] success in
+                guard let strongSelf = self else { return }
+                if success {
+                    // Update database
+                    DatabaseManager.shared.updateProfilePhoto(email: strongSelf.currentEmail) { updated in
+                        guard updated else {
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            strongSelf.fetchProfileData()
+                        }
                     }
                 }
             }
         }
     }
-}
