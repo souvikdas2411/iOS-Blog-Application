@@ -30,6 +30,8 @@ class ViewPostViewController: UITabBarController, UITableViewDataSource, UITable
                        forCellReuseIdentifier: "cell")
         table.register(PostHeaderTableViewCell.self,
                        forCellReuseIdentifier: PostHeaderTableViewCell.identifier)
+        table.register(PostDescTableViewCell.self,
+                       forCellReuseIdentifier: PostDescTableViewCell.identifier)
         table.backgroundColor = nil
         return table
     }()
@@ -83,12 +85,20 @@ class ViewPostViewController: UITabBarController, UITableViewDataSource, UITable
             cell.backgroundColor = .separator
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PostDescTableViewCell.identifier,
+                                                           for: indexPath) as? PostDescTableViewCell else {
+                fatalError()
+            }
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.selectionStyle = .none
-            cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.text = post.text
+//            cell.textLabel?.numberOfLines = 0
+            cell.configure(with: .init(desc: post.text))
+//            cell.textLabel?.text = post.text
             cell.backgroundColor = .separator
+            cell.textLabel?.isUserInteractionEnabled = true
+//            cell.textLabel?.isEnabled = true
             return cell
+            
         default:
             fatalError()
         }
@@ -102,7 +112,7 @@ class ViewPostViewController: UITabBarController, UITableViewDataSource, UITable
         case 1:
             return 250
         case 2:
-            return UITableView.automaticDimension
+            return 10000
         default:
             return UITableView.automaticDimension
         }
