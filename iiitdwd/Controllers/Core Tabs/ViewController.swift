@@ -27,7 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         button.backgroundColor = .systemBlue
         button.tintColor = .white
         button.setImage(UIImage(systemName: "square.and.pencil",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .medium)),
+                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .ultraLight)),
                         for: .normal)
         button.layer.cornerRadius = 30
         button.layer.shadowColor = UIColor.label.cgColor
@@ -41,8 +41,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.register(PostPreviewTableViewCell.self,
                            forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
         tableView.backgroundColor = nil
-//        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.isHidden = true
+        indicator.style = .large
+        indicator.backgroundColor = .separator
+        indicator.layer.cornerRadius = 30
+        return indicator
     }()
     
     override func viewDidLoad() {
@@ -58,11 +66,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.placeholder = "Search Users"
         searchController.searchBar.tintColor = .white
+        searchController.searchBar.keyboardType = .emailAddress
         navigationItem.searchController = searchController
         
         view.addSubview(headerView)
         view.addSubview(tableView)
         view.addSubview(composeButton)
+        view.addSubview(activityIndicator)
         composeButton.addTarget(self, action: #selector(didTapCreate), for: .touchUpInside)
         tableView.delegate = self
         tableView.dataSource = self
@@ -88,6 +98,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         )
         
         tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
+        activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
     
     @objc private func didTapCreate() {
@@ -109,10 +120,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private func fetchAllPosts() {
         print("Fetching home feed...")
-        
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+
         DatabaseManager.shared.getAllPosts { [weak self] posts in
-            self?.posts = posts
+            
+            self?.posts = posts.sorted(by: {$0.timestamp > $1.timestamp})
+            
+
             DispatchQueue.main.async {
+                self?.activityIndicator.isHidden = true
+                self?.activityIndicator.stopAnimating()
                 self?.tableView.reloadData()
                 self?.refreshControl.endRefreshing()
             }
@@ -162,9 +180,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             let vc = SearchProfileViewController(currentEmail: searchBar.text?.lowercased() ?? "none")
             vc.navigationItem.largeTitleDisplayMode = .never
-//            vc.title = "User Profile"
             self?.navigationController?.pushViewController(vc, animated: true)
-//            self?.present(vc, animated: true, completion: nil)
             print("USER FOUND")
         }
     }

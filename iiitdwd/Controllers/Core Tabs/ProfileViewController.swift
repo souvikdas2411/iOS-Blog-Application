@@ -27,6 +27,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         return tableView
     }()
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.isHidden = true
+        indicator.style = .large
+        indicator.backgroundColor = .separator
+        indicator.layer.cornerRadius = 30
+        return indicator
+    }()
+    
     init(currentEmail: String){
         self.currentEmail = currentEmail
         super.init(nibName: nil, bundle: nil)
@@ -48,6 +57,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         view.addSubview(headerView)
         view.addSubview(tableView)
+        view.addSubview(activityIndicator)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -68,6 +78,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         headerView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
+        activityIndicator.frame = CGRect(x: view.width/2 - 30, y: tableView.height/2 - 30, width: 60, height: 60)
         
     }
     
@@ -89,16 +100,16 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                                     width: 100,
                                     height: 100)
         
-        let activityIndicator: UIActivityIndicatorView = {
-            let indicator = UIActivityIndicatorView()
-            indicator.isHidden = false
-            indicator.startAnimating()
-            indicator.style = .large
-            indicator.backgroundColor = .separator
-            indicator.layer.cornerRadius = 30
-            indicator.frame = CGRect(x: view.width/2 - 30, y: headerView.height/2 - 30, width: 60, height: 60)
-            return indicator
-        }()
+//        let activityIndicator: UIActivityIndicatorView = {
+//            let indicator = UIActivityIndicatorView()
+//            indicator.isHidden = false
+//            indicator.startAnimating()
+//            indicator.style = .large
+//            indicator.backgroundColor = .separator
+//            indicator.layer.cornerRadius = 30
+//            indicator.frame = CGRect(x: view.width/2 - 30, y: headerView.height/2 - 30, width: 60, height: 60)
+//            return indicator
+//        }()
         
         let emailLabel = UILabel(frame: CGRect(x: 0,
                                                y: profilePhoto.bottom + 10,
@@ -118,22 +129,24 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 guard let url = url else {
                     return
                 }
-                activityIndicator.isHidden = false
-                activityIndicator.startAnimating()
-                let task = URLSession.shared.dataTask(with: url) { data, _, _ in
-                    guard let data = data else {
-                        //                        ivityIndicator.isHidden = true
-                        //                        activityIndicator.startAnimating()
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        activityIndicator.isHidden = true
-                        activityIndicator.stopAnimating()
-                        profilePhoto.image = UIImage(data: data)
-                    }
-                }
+//                activityIndicator.isHidden = false
+//                activityIndicator.startAnimating()
+                profilePhoto.sd_setImage(with: url, placeholderImage:UIImage(contentsOfFile:"launch-img"))
+//                activityIndicator.isHidden = true
+//                activityIndicator.stopAnimating()
                 
-                task.resume()
+//                let task = URLSession.shared.dataTask(with: url) { data, _, _ in
+//                    guard let data = data else {
+//                        return
+//                    }
+//                    DispatchQueue.main.async {
+//                        activityIndicator.isHidden = true
+//                        activityIndicator.stopAnimating()
+//                        profilePhoto.image = UIImage(data: data)
+//                    }
+//                }
+                
+//                task.resume()
             }
         }
         
@@ -218,11 +231,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         private func fetchPosts() {
             print("Fetching posts...")
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
 
             DatabaseManager.shared.getPosts(for: currentEmail) { [weak self] posts in
-                self?.posts = posts
+                self?.posts = posts.sorted(by: {$0.timestamp > $1.timestamp})
                 print("Found \(posts.count) posts")
                 DispatchQueue.main.async {
+                    self?.activityIndicator.isHidden = true
+                    self?.activityIndicator.stopAnimating()
                     self?.tableView.reloadData()
                     self?.refreshControl.endRefreshing()
                 }
