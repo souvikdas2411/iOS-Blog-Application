@@ -6,115 +6,118 @@
 //
 
 import UIKit
+import SDWebImage
+import WebKit
 
-class ViewPostViewController: UITabBarController, UITableViewDataSource, UITableViewDelegate {
-
+class ViewPostViewController: UITabBarController {
+    
     private let headerView = ViewerHeaderView()
     
     private let post: BlogPost
-//    private let isOwnedByCurrentUser: Bool
-
+    
     init(post: BlogPost) {
         self.post = post
-//        self.isOwnedByCurrentUser = isOwnedByCurrentUser
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError()
     }
-
-    private let tableView: UITableView = {
-        let table = UITableView()
-        table.register(UITableViewCell.self,
-                       forCellReuseIdentifier: "cell")
-        table.register(PostHeaderTableViewCell.self,
-                       forCellReuseIdentifier: PostHeaderTableViewCell.identifier)
-        table.register(PostDescTableViewCell.self,
-                       forCellReuseIdentifier: PostDescTableViewCell.identifier)
-        table.backgroundColor = nil
-        return table
+    
+    private let scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.backgroundColor = nil
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        return scroll
     }()
-
+    
+    let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = nil
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let postTitle: UITextView = {
+        let label = UITextView()
+        label.font = .systemFont(ofSize: 25, weight: .light)
+        label.backgroundColor = .separator
+        label.textAlignment = .center
+        label.isEditable = false
+        label.isSelectable = true
+        label.sizeToFit()
+        label.isScrollEnabled = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.dataDetectorTypes = .all
+        return label
+    }()
+    
+    private let postDesc: UITextView = {
+        let label = UITextView()
+        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.isEditable = false
+        label.isSelectable = true
+        label.sizeToFit()
+        label.isScrollEnabled = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.dataDetectorTypes = .all
+        label.backgroundColor = .separator
+        return label
+    }()
+    
+    private let postImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.masksToBounds = true
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .separator
+        return imageView
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         view.addSubview(headerView)
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
-
-//        if !isOwnedByCurrentUser {
-//            IAPManager.shared.logPostViewed()
-//        }
+        
+        postTitle.text = post.title
+        postImageView.sd_setImage(with: post.headerImageUrl, placeholderImage:UIImage(contentsOfFile:"launch-img"))
+        postDesc.text = post.text
+        scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
+        
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
         headerView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
-        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
-    }
-
-    // Table
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3 // title, iamge, text
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let index = indexPath.row
-        switch index {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.selectionStyle = .none
-            cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.font = .systemFont(ofSize: 25, weight: .bold)
-            cell.textLabel?.text = post.title
-            cell.backgroundColor = .separator
-            return cell
-        case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PostHeaderTableViewCell.identifier,
-                                                           for: indexPath) as? PostHeaderTableViewCell else {
-                fatalError()
-            }
-            cell.selectionStyle = .none
-            cell.configure(with: .init(imageUrl: post.headerImageUrl))
-            cell.backgroundColor = .separator
-            return cell
-        case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PostDescTableViewCell.identifier,
-                                                           for: indexPath) as? PostDescTableViewCell else {
-                fatalError()
-            }
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.selectionStyle = .none
-//            cell.textLabel?.numberOfLines = 0
-            cell.configure(with: .init(desc: post.text))
-//            cell.textLabel?.text = post.text
-            cell.backgroundColor = .separator
-            cell.textLabel?.isUserInteractionEnabled = true
-//            cell.textLabel?.isEnabled = true
-            return cell
-            
-        default:
-            fatalError()
-        }
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let index = indexPath.row
-        switch index {
-        case 0:
-            return UITableView.automaticDimension
-        case 1:
-            return 250
-        case 2:
-            return 10000
-        default:
-            return UITableView.automaticDimension
-        }
+        
+        scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        scrollView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.safeAreaInsets.bottom + 5).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        
+        contentView.addSubview(postTitle)
+        postTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        postTitle.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        postTitle.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        
+        contentView.addSubview(postImageView)
+        postImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        postImageView.topAnchor.constraint(equalTo: postTitle.bottomAnchor, constant: 5).isActive = true
+        postImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        
+        contentView.addSubview(postDesc)
+        postDesc.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        postDesc.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 5).isActive = true
+        postDesc.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        postDesc.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
 }

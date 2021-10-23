@@ -9,6 +9,9 @@ import UIKit
 
 class CreateNewPostViewController: UITabBarController {
     
+
+
+    
     private let headerView = CreatePostHeaderView()
 
     // Title field
@@ -129,10 +132,14 @@ class CreateNewPostViewController: UITabBarController {
                 }
 
                 // Insert of post into DB
+                let date = Date()
+                let format = DateFormatter()
+                format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let timestamp = format.string(from: date)
                 let post = BlogPost(
                     identifier: newPostId,
                     title: title,
-                    timestamp: Date().timeIntervalSince1970,
+                    timestamp: timestamp,
                     headerImageUrl: headerUrl,
                     text: body
                 )

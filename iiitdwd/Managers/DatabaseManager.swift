@@ -101,7 +101,7 @@ final class DatabaseManager {
                     guard let id = dictionary["id"] as? String,
                           let title = dictionary["title"] as? String,
                           let body = dictionary["body"] as? String,
-                          let created = dictionary["created"] as? TimeInterval,
+                          let created = dictionary["created"] as? String,
                           let imageUrlString = dictionary["headerImageUrl"] as? String else {
                         print("Invalid post fetch conversion")
                         return nil
