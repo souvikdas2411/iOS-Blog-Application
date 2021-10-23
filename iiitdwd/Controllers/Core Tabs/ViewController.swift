@@ -86,10 +86,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             width: 60,
             height: 60
         )
-//        tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        tableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-//        tableView.topAnchor.constraint(equalTo: searchController.searchBar.topAnchor).isActive = true
-//        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
     }
@@ -155,7 +151,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         DatabaseManager.shared.getUser(email: searchBar.text?.lowercased() ?? "none") { [weak self] user in
             guard let _ = user else {
-                let dialogMessage = UIAlertController(title: "Alert", message: "User not found!", preferredStyle: .alert)
+                let dialogMessage = UIAlertController(title: "Alert", message: "User not found! Please check the email address entered!", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
 //                    searchBar.text = ""
                 })

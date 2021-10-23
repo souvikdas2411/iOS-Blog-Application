@@ -49,6 +49,15 @@ class CreateNewPostViewController: UITabBarController {
         textView.font = .systemFont(ofSize: 15)
         return textView
     }()
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.isHidden = true
+        indicator.style = .large
+        indicator.backgroundColor = .separator
+        indicator.layer.cornerRadius = 30
+        return indicator
+    }()
 
     private var selectedHeaderImage: UIImage?
 
@@ -60,6 +69,7 @@ class CreateNewPostViewController: UITabBarController {
         view.addSubview(headerImageView)
         view.addSubview(textView)
         view.addSubview(titleField)
+        view.addSubview(activityIndicator)
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(didTapHeader))
         headerImageView.addGestureRecognizer(tap)
@@ -73,6 +83,7 @@ class CreateNewPostViewController: UITabBarController {
         titleField.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: 50)
         headerImageView.frame = CGRect(x: 10, y: titleField.bottom+5, width: view.width - 20, height: 160)
         textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom)
+        activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
 
     @objc private func didTapHeader() {
@@ -94,6 +105,7 @@ class CreateNewPostViewController: UITabBarController {
     }
 
     @objc private func didTapPost() {
+        
         // Check data and post
         guard let title = titleField.text,
               let body = textView.text,
@@ -111,6 +123,11 @@ class CreateNewPostViewController: UITabBarController {
         }
 
         print("Starting post...")
+        
+        view.isUserInteractionEnabled = false
+        navigationItem.rightBarButtonItem = nil
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
 
         let newPostId = UUID().uuidString
 
@@ -121,11 +138,19 @@ class CreateNewPostViewController: UITabBarController {
             postId: newPostId
         ) { success in
             guard success else {
+                self.configureButtons()
+                self.view.isUserInteractionEnabled = true
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
                 return
             }
             StorageManager.shared.downloadUrlForPostHeader(email: email, postId: newPostId) { url in
                 guard let headerUrl = url else {
                     DispatchQueue.main.async {
+                        self.configureButtons()
+                        self.view.isUserInteractionEnabled = true
+                        self.activityIndicator.isHidden = true
+                        self.activityIndicator.stopAnimating()
                         HapticsManager.shared.vibrate(for: .error)
                     }
                     return
@@ -134,7 +159,10 @@ class CreateNewPostViewController: UITabBarController {
                 // Insert of post into DB
                 DatabaseManager.shared.getUser(email: UserDefaults.standard.value(forKey: "email") as! String){ user in
                     guard let thisUser = user else {
-                        print("0-0-0-0-0-0-0-0-0-0-0-0DEATH")
+                        self.configureButtons()
+                        self.view.isUserInteractionEnabled = true
+                        self.activityIndicator.isHidden = true
+                        self.activityIndicator.stopAnimating()
                         return
                     }
                     let date = Date()
@@ -153,12 +181,20 @@ class CreateNewPostViewController: UITabBarController {
                     DatabaseManager.shared.insert(blogPost: post, email: email) { [weak self] posted in
                         guard posted else {
                             DispatchQueue.main.async {
+                                self?.configureButtons()
+                                self?.view.isUserInteractionEnabled = true
+                                self?.activityIndicator.isHidden = true
+                                self?.activityIndicator.stopAnimating()
                                 HapticsManager.shared.vibrate(for: .error)
                             }
                             return
                         }
 
                         DispatchQueue.main.async {
+                            self?.configureButtons()
+                            self?.view.isUserInteractionEnabled = true
+                            self?.activityIndicator.isHidden = true
+                            self?.activityIndicator.stopAnimating()
                             HapticsManager.shared.vibrate(for: .success)
                             self?.dismiss(animated: true, completion: nil)
                         }

@@ -121,12 +121,14 @@ class SigninViewController: UITabBarController {
                   return
               }
         
+        view.isUserInteractionEnabled = false
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
         AuthManager.shared.signIn(email: email, password: password){ [weak self] success in
             if success {
                 DispatchQueue.main.async {
+                    self?.view.isUserInteractionEnabled = true
                     self!.activityIndicator.isHidden = true
                     self!.activityIndicator.stopAnimating()
                     UserDefaults.standard.set(email, forKey: "email")
@@ -136,6 +138,7 @@ class SigninViewController: UITabBarController {
                 }
             }
             else {
+                self?.view.isUserInteractionEnabled = true
                 self!.activityIndicator.isHidden = true
                 self!.activityIndicator.stopAnimating()
                 let dialogMessage = UIAlertController(title: "Alert", message: "Something went wrong!", preferredStyle: .alert)
