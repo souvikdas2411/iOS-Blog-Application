@@ -35,6 +35,7 @@
 		4F49411627232E64001F52E7 /* PostPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411527232E64001F52E7 /* PostPreviewTableViewCell.swift */; };
 		4F49411A272333F7001F52E7 /* ViewerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F494119272333F7001F52E7 /* ViewerHeaderView.swift */; };
 		4F49411C2723387B001F52E7 /* ViewControllerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */; };
+		4FB88EA32724653700DB35B4 /* SearchProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB88EA22724653700DB35B4 /* SearchProfileViewController.swift */; };
 		EA1200AF7EABF2D0876CDE02 /* Pods_iiitdwd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		4F49411527232E64001F52E7 /* PostPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		4F494119272333F7001F52E7 /* ViewerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerHeaderView.swift; sourceTree = "<group>"; };
 		4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerHeaderView.swift; sourceTree = "<group>"; };
+		4FB88EA22724653700DB35B4 /* SearchProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProfileViewController.swift; sourceTree = "<group>"; };
 		DC7CEE484454865D5EF383DB /* Pods-iiitdwd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iiitdwd.release.xcconfig"; path = "Target Support Files/Pods-iiitdwd/Pods-iiitdwd.release.xcconfig"; sourceTree = "<group>"; };
 		F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iiitdwd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -225,6 +227,7 @@
 				4F4940CD27219D2B001F52E7 /* AppDelegate.swift */,
 				4F4940CF27219D2B001F52E7 /* SceneDelegate.swift */,
 				4F4941082721E0FD001F52E7 /* Extensions.swift */,
+				4FB88EA22724653700DB35B4 /* SearchProfileViewController.swift */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				4F49411C2723387B001F52E7 /* ViewControllerHeaderView.swift in Sources */,
 				4F49410F27220053001F52E7 /* ProfileHeaderView.swift in Sources */,
 				4F4940CE27219D2B001F52E7 /* AppDelegate.swift in Sources */,
+				4FB88EA32724653700DB35B4 /* SearchProfileViewController.swift in Sources */,
 				4F49411127232123001F52E7 /* HapticsManager.swift in Sources */,
 				4F4941012721D872001F52E7 /* User.swift in Sources */,
 				4F4940E82721C1DA001F52E7 /* ProfileViewController.swift in Sources */,

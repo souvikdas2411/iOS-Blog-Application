@@ -47,6 +47,7 @@ class PostPreviewTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15, weight: .ultraLight)
         label.textAlignment = .right
+        label.textColor = .white
         return label
     }()
     

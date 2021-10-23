@@ -160,6 +160,7 @@ final class DatabaseManager {
                 guard let data = snapshot?.data() as? [String: String],
                       let name = data["name"],
                       error == nil else {
+                          completion(nil)
                           return
                       }
                 

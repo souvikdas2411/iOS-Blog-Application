@@ -7,11 +7,20 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class resultsVC: UIViewController {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+}
+
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     private let headerView = ViewControllerHeaderView()
     
     private let refreshControl = UIRefreshControl()
+    
+    private let searchController = UISearchController(searchResultsController: resultsVC())
+    
     
     private let composeButton: UIButton = {
         let button = UIButton()
@@ -32,18 +41,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.register(PostPreviewTableViewCell.self,
                            forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
         tableView.backgroundColor = nil
+//        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
+        
+        searchController.searchBar.delegate = self
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.searchBar.placeholder = "Search Users"
+        searchController.searchBar.tintColor = .white
+        navigationItem.searchController = searchController
+        
         view.addSubview(headerView)
         view.addSubview(tableView)
         view.addSubview(composeButton)
         composeButton.addTarget(self, action: #selector(didTapCreate), for: .touchUpInside)
         tableView.delegate = self
         tableView.dataSource = self
+        
         // Add Refresh Control to Table View
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
@@ -63,6 +86,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             width: 60,
             height: 60
         )
+//        tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        tableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//        tableView.topAnchor.constraint(equalTo: searchController.searchBar.topAnchor).isActive = true
+//        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
         tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
     }
     
@@ -77,6 +105,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         fetchAllPosts()
     }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     private var posts: [BlogPost] = []
     
     private func fetchAllPosts() {
@@ -87,7 +119,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
                 self?.refreshControl.endRefreshing()
-//                self?.activityIndicatorView.stopAnimating()
             }
         }
     }
@@ -121,4 +152,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        DatabaseManager.shared.getUser(email: searchBar.text?.lowercased() ?? "none") { [weak self] user in
+            guard let _ = user else {
+                let dialogMessage = UIAlertController(title: "Alert", message: "User not found!", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
+//                    searchBar.text = ""
+                })
+                dialogMessage.addAction(ok)
+                self?.present(dialogMessage, animated: true, completion: nil)
+                return
+            }
+            
+            let vc = SearchProfileViewController(currentEmail: searchBar.text?.lowercased() ?? "none")
+            vc.navigationItem.largeTitleDisplayMode = .never
+//            vc.title = "User Profile"
+            self?.navigationController?.pushViewController(vc, animated: true)
+//            self?.present(vc, animated: true, completion: nil)
+            print("USER FOUND")
+        }
+    }
 }
+
+
