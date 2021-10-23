@@ -18,10 +18,9 @@ class CreateNewPostViewController: UITabBarController {
     private let titleField: UITextField = {
         let field = UITextField()
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
-//        field.layer.cornerRadius = 25
         field.leftViewMode = .always
         field.placeholder = "Enter Title"
-        field.autocapitalizationType = .words
+        field.autocapitalizationType = .none
         field.autocorrectionType = .no
         field.backgroundColor = .separator
         field.layer.masksToBounds = true
@@ -46,7 +45,8 @@ class CreateNewPostViewController: UITabBarController {
         textView.backgroundColor = .separator
         textView.isEditable = true
         textView.autocorrectionType = .no
-        textView.font = .systemFont(ofSize: 20)
+        textView.dataDetectorTypes = .all
+        textView.font = .systemFont(ofSize: 15)
         return textView
     }()
 
@@ -132,29 +132,36 @@ class CreateNewPostViewController: UITabBarController {
                 }
 
                 // Insert of post into DB
-                let date = Date()
-                let format = DateFormatter()
-                format.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let timestamp = format.string(from: date)
-                let post = BlogPost(
-                    identifier: newPostId,
-                    title: title,
-                    timestamp: timestamp,
-                    headerImageUrl: headerUrl,
-                    text: body
-                )
-
-                DatabaseManager.shared.insert(blogPost: post, email: email) { [weak self] posted in
-                    guard posted else {
-                        DispatchQueue.main.async {
-                            HapticsManager.shared.vibrate(for: .error)
-                        }
+                DatabaseManager.shared.getUser(email: UserDefaults.standard.value(forKey: "email") as! String){ user in
+                    guard let thisUser = user else {
+                        print("0-0-0-0-0-0-0-0-0-0-0-0DEATH")
                         return
                     }
+                    let date = Date()
+                    let format = DateFormatter()
+                    format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let timestamp = format.string(from: date)
+                    let post = BlogPost(
+                        identifier: newPostId,
+                        title: title,
+                        timestamp: timestamp,
+                        headerImageUrl: headerUrl,
+                        text: body,
+                        author: thisUser.name
+                    )
 
-                    DispatchQueue.main.async {
-                        HapticsManager.shared.vibrate(for: .success)
-                        self?.dismiss(animated: true, completion: nil)
+                    DatabaseManager.shared.insert(blogPost: post, email: email) { [weak self] posted in
+                        guard posted else {
+                            DispatchQueue.main.async {
+                                HapticsManager.shared.vibrate(for: .error)
+                            }
+                            return
+                        }
+
+                        DispatchQueue.main.async {
+                            HapticsManager.shared.vibrate(for: .success)
+                            self?.dismiss(animated: true, completion: nil)
+                        }
                     }
                 }
             }

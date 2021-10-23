@@ -10,11 +10,13 @@ import SDWebImage
 
 class PostPreviewTableViewCellViewModel {
     let title: String
+    let author: String
     let imageUrl: URL?
     var imageData: Data?
 
-    init(title: String, imageUrl: URL?) {
+    init(title: String, author: String, imageUrl: URL?) {
         self.title = title
+        self.author = author
         self.imageUrl = imageUrl
     }
 }
@@ -35,7 +37,16 @@ class PostPreviewTableViewCell: UITableViewCell {
     private let postTitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.font = .systemFont(ofSize: 20, weight: .light)
+//        label.backgroundColor = .red
+        return label
+    }()
+    
+    private let postAuthor: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 15, weight: .ultraLight)
+        label.textAlignment = .right
         return label
     }()
     
@@ -45,7 +56,6 @@ class PostPreviewTableViewCell: UITableViewCell {
         indicator.startAnimating()
         indicator.style = .large
         indicator.backgroundColor = .separator
-//        indicator.layer.cornerRadius = 30
         return indicator
     }()
 
@@ -55,6 +65,7 @@ class PostPreviewTableViewCell: UITableViewCell {
         contentView.addSubview(postImageView)
         contentView.addSubview(activityIndicator)
         contentView.addSubview(postTitleLabel)
+        contentView.addSubview(postAuthor)
     }
 
     required init?(coder: NSCoder) {
@@ -79,19 +90,24 @@ class PostPreviewTableViewCell: UITableViewCell {
             x: postImageView.right+5,
             y: 5,
             width: contentView.width-5-separatorInset.left-postImageView.width,
-            height: contentView.height-10
+            height: contentView.height/2 - 10
         )
+        postAuthor.frame = CGRect(x: postImageView.right+5,
+                                  y: postTitleLabel.bottom + 5,
+                                  width: contentView.width-10-separatorInset.left-postImageView.width,
+                                  height: contentView.height/2 - 10)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         postTitleLabel.text = nil
         postImageView.image = nil
+        postAuthor.text = nil
     }
 
     func configure(with viewModel: PostPreviewTableViewCellViewModel) {
         postTitleLabel.text = viewModel.title
-        
+        postAuthor.text = "by " + viewModel.author
  
         DispatchQueue.main.async {
             self.postImageView.sd_setImage(with: viewModel.imageUrl, placeholderImage:UIImage(contentsOfFile:"launch-img"))

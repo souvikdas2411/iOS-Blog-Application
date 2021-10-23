@@ -13,4 +13,5 @@ struct BlogPost {
     let timestamp: String
     let headerImageUrl: URL?
     let text: String
+    let author: String
 }

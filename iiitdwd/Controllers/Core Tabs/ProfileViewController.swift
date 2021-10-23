@@ -238,7 +238,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
                 fatalError()
             }
-            cell.configure(with: .init(title: post.title, imageUrl: post.headerImageUrl))
+            cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
             cell.backgroundColor = .separator
             return cell
         }

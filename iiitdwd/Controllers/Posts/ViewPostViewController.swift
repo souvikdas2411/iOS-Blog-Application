@@ -112,7 +112,8 @@ class ViewPostViewController: UITabBarController {
         contentView.addSubview(postImageView)
         postImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         postImageView.topAnchor.constraint(equalTo: postTitle.bottomAnchor, constant: 5).isActive = true
-        postImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        postImageView.widthAnchor.constraint(equalToConstant: view.width).isActive = true
+        postImageView.heightAnchor.constraint(equalToConstant: view.width).isActive = true
         
         contentView.addSubview(postDesc)
         postDesc.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
