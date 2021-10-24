@@ -9,9 +9,6 @@ import UIKit
 
 class CreateNewPostViewController: UITabBarController {
     
-
-
-    
     private let headerView = CreatePostHeaderView()
 
     // Title field
@@ -21,8 +18,9 @@ class CreateNewPostViewController: UITabBarController {
         field.leftViewMode = .always
         field.placeholder = "Enter Title"
         field.autocapitalizationType = .none
-        field.autocorrectionType = .no
-        field.backgroundColor = .separator
+        field.autocorrectionType = .yes
+        field.keyboardType = .default
+        field.backgroundColor = nil
         field.layer.masksToBounds = true
         return field
     }()
@@ -33,7 +31,7 @@ class CreateNewPostViewController: UITabBarController {
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "photo")
+        imageView.image = UIImage(systemName: "text.below.photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .ultraLight))
         imageView.tintColor = .white
         imageView.backgroundColor = .separator
         return imageView
@@ -44,8 +42,8 @@ class CreateNewPostViewController: UITabBarController {
         let textView = UITextView()
         textView.backgroundColor = .separator
         textView.isEditable = true
-        textView.autocorrectionType = .no
         textView.dataDetectorTypes = .all
+        textView.autocorrectionType = .yes
         textView.font = .systemFont(ofSize: 15)
         return textView
     }()

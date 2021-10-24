@@ -8,9 +8,24 @@
 import UIKit
 
 class resultsVC: UIViewController {
+    
+    private let label: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.text = "Please type the full email address and hit search!"
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        view.backgroundColor = .separator
+        view.addSubview(label)
+        label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        label.topAnchor.constraint(equalTo: view.topAnchor, constant: view.safeAreaInsets.top).isActive = true
+        label.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20).isActive = true
     }
+    
 }
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
@@ -97,7 +112,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             height: 60
         )
         
-        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
+//        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!) - 100)
+        tableView.frame = CGRect(x: 0,
+                                 y: view.safeAreaInsets.top,
+                                 width: view.width,
+                                 height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)! + self.searchController.searchBar.frame.height))
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
     

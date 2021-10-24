@@ -65,7 +65,7 @@ class SearchProfileViewController: UIViewController, UITableViewDelegate, UITabl
         super.viewDidLayoutSubviews()
         
         headerView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
-        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height)
+        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
         
     }
     

@@ -41,7 +41,7 @@ class ViewPostViewController: UITabBarController {
     private let postTitle: UITextView = {
         let label = UITextView()
         label.font = .systemFont(ofSize: 25, weight: .light)
-        label.backgroundColor = .separator
+        label.backgroundColor = nil
         label.textAlignment = .center
         label.isEditable = false
         label.isSelectable = true
@@ -61,7 +61,7 @@ class ViewPostViewController: UITabBarController {
         label.isScrollEnabled = false
         label.translatesAutoresizingMaskIntoConstraints = false
         label.dataDetectorTypes = .all
-        label.backgroundColor = .separator
+        label.backgroundColor = nil
         return label
     }()
     
@@ -71,19 +71,31 @@ class ViewPostViewController: UITabBarController {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .separator
+        imageView.backgroundColor = nil
         return imageView
     }()
     
+    private let moreAboutTheAuthor: UIButton = {
+        let button = UIButton()
+//        button.setTitle("More from the " + post.author + "!", for: .normal)
+        button.setTitleColor(.link, for: .normal)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 20
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         view.addSubview(headerView)
         
         postTitle.text = post.title
         postImageView.sd_setImage(with: post.headerImageUrl, placeholderImage:UIImage(contentsOfFile:"launch-img"))
         postDesc.text = post.text
+        moreAboutTheAuthor.setTitle("More from " + post.author + "!", for: .normal)
+        moreAboutTheAuthor.addTarget(self, action: #selector(didTapMore), for: .touchUpInside)
         scrollView.addSubview(contentView)
         view.addSubview(scrollView)
         
@@ -119,6 +131,24 @@ class ViewPostViewController: UITabBarController {
         postDesc.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         postDesc.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 5).isActive = true
         postDesc.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        postDesc.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+//        postDesc.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        
+        contentView.addSubview(moreAboutTheAuthor)
+        
+        moreAboutTheAuthor.topAnchor.constraint(equalTo: postDesc.bottomAnchor, constant: 5).isActive = true
+//        moreAboutTheAuthor.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: contentView.width - 100).isActive = true
+        moreAboutTheAuthor.widthAnchor.constraint(equalToConstant: view.width).isActive = true
+        moreAboutTheAuthor.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        moreAboutTheAuthor.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
+        
+        
+        
+    }
+    
+    @objc private func didTapMore(){
+        let vc = SearchProfileViewController(currentEmail: UserDefaults.standard.value(forKey: "email") as! String)
+        vc.navigationItem.largeTitleDisplayMode = .never
+        self.navigationController?.pushViewController(vc, animated: true)
+        print("USER FOUND")
     }
 }

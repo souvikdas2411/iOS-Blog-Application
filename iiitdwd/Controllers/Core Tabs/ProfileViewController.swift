@@ -100,17 +100,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                                     width: 100,
                                     height: 100)
         
-//        let activityIndicator: UIActivityIndicatorView = {
-//            let indicator = UIActivityIndicatorView()
-//            indicator.isHidden = false
-//            indicator.startAnimating()
-//            indicator.style = .large
-//            indicator.backgroundColor = .separator
-//            indicator.layer.cornerRadius = 30
-//            indicator.frame = CGRect(x: view.width/2 - 30, y: headerView.height/2 - 30, width: 60, height: 60)
-//            return indicator
-//        }()
-        
         let emailLabel = UILabel(frame: CGRect(x: 0,
                                                y: profilePhoto.bottom + 10,
                                                width: view.width,
@@ -129,24 +118,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 guard let url = url else {
                     return
                 }
-//                activityIndicator.isHidden = false
-//                activityIndicator.startAnimating()
                 profilePhoto.sd_setImage(with: url, placeholderImage:UIImage(contentsOfFile:"launch-img"))
-//                activityIndicator.isHidden = true
-//                activityIndicator.stopAnimating()
-                
-//                let task = URLSession.shared.dataTask(with: url) { data, _, _ in
-//                    guard let data = data else {
-//                        return
-//                    }
-//                    DispatchQueue.main.async {
-//                        activityIndicator.isHidden = true
-//                        activityIndicator.stopAnimating()
-//                        profilePhoto.image = UIImage(data: data)
-//                    }
-//                }
-                
-//                task.resume()
             }
         }
         
