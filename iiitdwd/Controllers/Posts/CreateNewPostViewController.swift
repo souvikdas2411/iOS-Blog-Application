@@ -89,6 +89,7 @@ class CreateNewPostViewController: UITabBarController {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
         picker.delegate = self
+        picker.allowsEditing = true
         present(picker, animated: true)
     }
 

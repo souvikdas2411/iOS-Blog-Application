@@ -196,13 +196,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
         }
-        
-        
-//        HapticsManager.shared.vibrateForSelection()
-//
-//        let vc = ViewPostViewController(post: posts[indexPath.row])
-//        vc.navigationItem.largeTitleDisplayMode = .never
-//        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
