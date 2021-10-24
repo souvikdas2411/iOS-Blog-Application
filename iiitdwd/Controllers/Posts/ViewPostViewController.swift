@@ -40,21 +40,40 @@ class ViewPostViewController: UITabBarController {
     
     private let postTitle: UITextView = {
         let label = UITextView()
-        label.font = .systemFont(ofSize: 25, weight: .light)
-        label.backgroundColor = nil
-        label.textAlignment = .center
-        label.isEditable = false
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.textColor = .black
+//        label.numberOfLines = 0
         label.isSelectable = true
-        label.sizeToFit()
+        label.isEditable = true
+        label.backgroundColor = .white
+        label.textAlignment = .center
         label.isScrollEnabled = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.sizeToFit()
         label.dataDetectorTypes = .all
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let postDetails: UITextView = {
+        let label = UITextView()
+        label.font = .systemFont(ofSize: 13, weight: .light)
+        label.textColor = .lightGray
+        label.isSelectable = true
+        label.isEditable = true
+//        label.numberOfLines = 0
+        label.backgroundColor = .white
+        label.textAlignment = .center
+        label.isScrollEnabled = false
+        label.sizeToFit()
+        label.dataDetectorTypes = .all
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let postDesc: UITextView = {
         let label = UITextView()
-        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 16, weight: .light)
         label.isEditable = false
         label.isSelectable = true
         label.sizeToFit()
@@ -69,17 +88,16 @@ class ViewPostViewController: UITabBarController {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = nil
+        imageView.backgroundColor = .separator
         return imageView
     }()
     
     private let moreAboutTheAuthor: UIButton = {
         let button = UIButton()
-//        button.setTitle("More from the " + post.author + "!", for: .normal)
-        button.setTitleColor(.link, for: .normal)
-        button.backgroundColor = .white
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .black
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -88,10 +106,11 @@ class ViewPostViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+
         view.addSubview(headerView)
-        
+        postImageView.layer.cornerRadius = view.width/5
         postTitle.text = post.title
+        postDetails.text = "BY " + post.author.uppercased() + " ON " + post.timestamp
         postImageView.sd_setImage(with: post.headerImageUrl, placeholderImage:UIImage(contentsOfFile:"launch-img"))
         postDesc.text = post.text
         moreAboutTheAuthor.setTitle("More from " + post.author + "!", for: .normal)
@@ -121,9 +140,15 @@ class ViewPostViewController: UITabBarController {
         postTitle.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         postTitle.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
+        contentView.addSubview(postDetails)
+        postDetails.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        postDetails.topAnchor.constraint(equalTo: postTitle.bottomAnchor, constant: 5).isActive = true
+        postDetails.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        
         contentView.addSubview(postImageView)
-        postImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        postImageView.topAnchor.constraint(equalTo: postTitle.bottomAnchor, constant: 5).isActive = true
+        postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
+        postImageView.topAnchor.constraint(equalTo: postDetails.bottomAnchor, constant: 5).isActive = true
+        postImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         postImageView.widthAnchor.constraint(equalToConstant: view.width).isActive = true
         postImageView.heightAnchor.constraint(equalToConstant: view.width).isActive = true
         
@@ -132,17 +157,20 @@ class ViewPostViewController: UITabBarController {
         postDesc.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 5).isActive = true
         postDesc.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
 //        postDesc.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+//                postDesc.bottomAnchor.constraint(equalTo: moreAboutTheAuthor.topAnchor).isActive = true
         
         contentView.addSubview(moreAboutTheAuthor)
-        
+//        moreAboutTheAuthor.topAnchor.constraint(equalTo: postDesc.bottomAnchor, constant: 5).isActive = true
         moreAboutTheAuthor.topAnchor.constraint(equalTo: postDesc.bottomAnchor, constant: 5).isActive = true
-//        moreAboutTheAuthor.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: contentView.width - 100).isActive = true
+        moreAboutTheAuthor.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
+        moreAboutTheAuthor.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         moreAboutTheAuthor.widthAnchor.constraint(equalToConstant: view.width).isActive = true
         moreAboutTheAuthor.heightAnchor.constraint(equalToConstant: 50).isActive = true
         moreAboutTheAuthor.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
-        
-        
-        
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     @objc private func didTapMore(){

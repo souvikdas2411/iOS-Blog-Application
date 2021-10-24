@@ -76,6 +76,8 @@ class SearchProfileViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.tableHeaderView = headerView
         
         let profilePhoto = UIImageView()
+        profilePhoto.layer.borderWidth = 1
+        profilePhoto.layer.borderColor = UIColor.lightGray.cgColor
         profilePhoto.isUserInteractionEnabled = true
         profilePhoto.tintColor = .white
         profilePhoto.backgroundColor = .white
@@ -164,7 +166,7 @@ class SearchProfileViewController: UIViewController, UITableViewDelegate, UITabl
         print("Fetching posts...")
         
         DatabaseManager.shared.getPosts(for: currentEmail) { [weak self] posts in
-            self?.posts = posts
+            self?.posts = posts.sorted(by: {$0.timestamp > $1.timestamp})
             print("Found \(posts.count) posts")
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
@@ -183,7 +185,7 @@ class SearchProfileViewController: UIViewController, UITableViewDelegate, UITabl
             fatalError()
         }
         cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
-        cell.backgroundColor = .separator
+//        cell.backgroundColor = .separator
         return cell
     }
     

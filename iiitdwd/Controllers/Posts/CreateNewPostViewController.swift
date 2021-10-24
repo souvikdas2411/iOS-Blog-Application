@@ -32,15 +32,16 @@ class CreateNewPostViewController: UITabBarController {
         imageView.isUserInteractionEnabled = true
         imageView.clipsToBounds = true
         imageView.image = UIImage(systemName: "text.below.photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .ultraLight))
-        imageView.tintColor = .white
-        imageView.backgroundColor = .separator
+        imageView.tintColor = .systemPink
+//        imageView.backgroundColor = .white
         return imageView
     }()
 
     // TextView for post
     private let textView: UITextView = {
         let textView = UITextView()
-        textView.backgroundColor = .separator
+//        textView.backgroundColor = .lightGray
+        textView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         textView.isEditable = true
         textView.dataDetectorTypes = .all
         textView.autocorrectionType = .yes
@@ -99,7 +100,7 @@ class CreateNewPostViewController: UITabBarController {
             action: #selector(didTapPost)
         )
         
-        navigationItem.rightBarButtonItem?.tintColor = .white
+        navigationItem.rightBarButtonItem?.tintColor = .systemPink
     }
 
     @objc private func didTapPost() {
@@ -210,7 +211,7 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate, UINaviga
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
-        guard let image = info[.originalImage] as? UIImage else {
+        guard let image = info[.editedImage] as? UIImage else {
             return
         }
         selectedHeaderImage = image

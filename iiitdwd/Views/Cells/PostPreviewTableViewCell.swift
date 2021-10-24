@@ -29,7 +29,7 @@ class PostPreviewTableViewCell: UITableViewCell {
         imageView.layer.masksToBounds = true
         imageView.clipsToBounds = true
 //        imageView.layer.cornerRadius = 8
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = nil
         return imageView
     }()
@@ -39,6 +39,7 @@ class PostPreviewTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 20, weight: .light)
 //        label.backgroundColor = .red
+        label.textColor = .black
         return label
     }()
     
@@ -47,7 +48,7 @@ class PostPreviewTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15, weight: .ultraLight)
         label.textAlignment = .right
-        label.textColor = .white
+        label.textColor = .black
         return label
     }()
     
@@ -81,7 +82,7 @@ class PostPreviewTableViewCell: UITableViewCell {
             width: contentView.height-10,
             height: contentView.height-10
         )
-        postImageView.layer.cornerRadius = (contentView.height-10)/2
+        postImageView.layer.cornerRadius = (contentView.height-10)/5
         activityIndicator.frame = CGRect(x: separatorInset.left,
                                          y: 5,
                                          width: contentView.height-10,

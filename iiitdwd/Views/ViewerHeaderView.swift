@@ -12,7 +12,8 @@ import UIKit
 class ViewerHeaderView: UIView {
 
     private let imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "launch-img"))
+//        bg-view
+        let imageView = UIImageView(image: UIImage(named: "bg-view"))
         imageView.contentMode = .scaleToFill
         imageView.backgroundColor = .systemBackground
         return imageView

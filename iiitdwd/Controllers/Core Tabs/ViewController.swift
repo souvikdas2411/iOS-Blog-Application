@@ -7,39 +7,21 @@
 
 import UIKit
 
-class resultsVC: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
     
-    private let label: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.text = "Please type the full email address and hit search!"
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        view.backgroundColor = .separator
-        view.addSubview(label)
-        label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        label.topAnchor.constraint(equalTo: view.topAnchor, constant: view.safeAreaInsets.top).isActive = true
-        label.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20).isActive = true
-    }
-    
-}
-
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+    private var posts: [BlogPost] = []
     
     private let headerView = ViewControllerHeaderView()
     
     private let refreshControl = UIRefreshControl()
     
-    private let searchController = UISearchController(searchResultsController: resultsVC())
+    var filteredTableData = [BlogPost]()
+    var resultSearchController = UISearchController()
     
     
     private let composeButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = .link
         button.tintColor = .white
         button.setImage(UIImage(systemName: "square.and.pencil",
                                 withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .ultraLight)),
@@ -56,6 +38,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.register(PostPreviewTableViewCell.self,
                            forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
         tableView.backgroundColor = nil
+        tableView.keyboardDismissMode = .onDrag
+//        tableView.backgroundColor = .red
         return tableView
     }()
     
@@ -70,19 +54,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+//        view.backgroundColor = .systemBackground
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         
         view.addGestureRecognizer(tap)
         
-        searchController.searchBar.delegate = self
-        searchController.searchBar.autocapitalizationType = .none
-        searchController.searchBar.placeholder = "Search Users"
-        searchController.searchBar.tintColor = .white
-        searchController.searchBar.keyboardType = .emailAddress
-        navigationItem.searchController = searchController
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chart.line.uptrend.xyaxis"),
+                                                            style: .done, target: self, action: #selector(trendTapped))
+        navigationItem.rightBarButtonItem?.tintColor = .systemPink
         
         view.addSubview(headerView)
         view.addSubview(tableView)
@@ -100,6 +81,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         refreshControl.addTarget(self, action: #selector(didRefresh), for: .valueChanged)
         fetchAllPosts()
+        
+        resultSearchController = ({
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchResultsUpdater = self
+            controller.obscuresBackgroundDuringPresentation = false
+            controller.searchBar.sizeToFit()
+            controller.searchBar.placeholder = "Search by titles/users"
+            
+            tableView.tableHeaderView = controller.searchBar
+            
+            return controller
+        })()
+        
+//        tableView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -112,11 +107,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             height: 60
         )
         
-//        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!) - 100)
-        tableView.frame = CGRect(x: 0,
-                                 y: view.safeAreaInsets.top,
-                                 width: view.width,
-                                 height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)! + self.searchController.searchBar.frame.height))
+        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
+        
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
     
@@ -127,6 +119,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         present(navVC, animated: true)
     }
     
+    @objc private func trendTapped() {
+        
+    }
+    
     @objc private func didRefresh() {
         fetchAllPosts()
     }
@@ -134,8 +130,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-    
-    private var posts: [BlogPost] = []
     
     private func fetchAllPosts() {
         print("Fetching home feed...")
@@ -157,7 +151,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        
+        if  (resultSearchController.isActive) {
+            return filteredTableData.count
+        } else {
+            return posts.count
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -165,9 +165,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
             fatalError()
         }
-        cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
-        cell.backgroundColor = .separator
-        return cell
+                
+        if (resultSearchController.isActive) {
+            cell.configure(with: .init(title: filteredTableData[indexPath.row].title, author: filteredTableData[indexPath.row].author, imageUrl: filteredTableData[indexPath.row].headerImageUrl))
+            return cell
+        }
+        else {
+            cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
+//            cell.backgroundColor = .separator
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -177,32 +184,42 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        HapticsManager.shared.vibrateForSelection()
-        
-        let vc = ViewPostViewController(post: posts[indexPath.row])
-        vc.navigationItem.largeTitleDisplayMode = .never
-        vc.title = "Post"
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        DatabaseManager.shared.getUser(email: searchBar.text?.lowercased() ?? "none") { [weak self] user in
-            guard let _ = user else {
-                let dialogMessage = UIAlertController(title: "Alert", message: "User not found! Please check the email address entered!", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
-//                    searchBar.text = ""
-                })
-                dialogMessage.addAction(ok)
-                self?.present(dialogMessage, animated: true, completion: nil)
-                return
-            }
-            
-            let vc = SearchProfileViewController(currentEmail: searchBar.text?.lowercased() ?? "none")
+        if (resultSearchController.isActive) {
+            let vc = ViewPostViewController(post: filteredTableData[indexPath.row])
             vc.navigationItem.largeTitleDisplayMode = .never
-            self?.navigationController?.pushViewController(vc, animated: true)
-            print("USER FOUND")
+            resultSearchController.searchBar.text = ""
+            resultSearchController.dismiss(animated: true, completion: nil)
+            navigationController?.pushViewController(vc, animated: true)
         }
+        else {
+            let vc = ViewPostViewController(post: posts[indexPath.row])
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        
+//        HapticsManager.shared.vibrateForSelection()
+//
+//        let vc = ViewPostViewController(post: posts[indexPath.row])
+//        vc.navigationItem.largeTitleDisplayMode = .never
+//        navigationController?.pushViewController(vc, animated: true)
     }
+}
+
+extension ViewController {
+
+func updateSearchResults(for searchController: UISearchController) {
+    filteredTableData.removeAll(keepingCapacity: false)
+
+//    let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
+    let array = posts.filter {
+        $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased())
+        
+    }
+    filteredTableData = array
+
+    self.tableView.reloadData()
+}
 }
 
 
