@@ -44,7 +44,7 @@ class ViewPostViewController: UITabBarController {
         label.textColor = .black
 //        label.numberOfLines = 0
         label.isSelectable = true
-        label.isEditable = true
+        label.isEditable = false
         label.backgroundColor = .white
         label.textAlignment = .center
         label.isScrollEnabled = false

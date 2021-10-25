@@ -18,14 +18,12 @@
 		4F4940EE2721C25E001F52E7 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940ED2721C25E001F52E7 /* SignUpViewController.swift */; };
 		4F4940F02721C26B001F52E7 /* ViewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940EF2721C26B001F52E7 /* ViewPostViewController.swift */; };
 		4F4940F22721C279001F52E7 /* CreateNewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940F12721C279001F52E7 /* CreateNewPostViewController.swift */; };
-		4F4940F42721C296001F52E7 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940F32721C296001F52E7 /* IAPManager.swift */; };
 		4F4940F62721C2A4001F52E7 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940F52721C2A4001F52E7 /* DatabaseManager.swift */; };
 		4F4940F82721C2B5001F52E7 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940F72721C2B5001F52E7 /* AuthManager.swift */; };
 		4F4940FA2721C2C0001F52E7 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4940F92721C2C0001F52E7 /* StorageManager.swift */; };
 		4F4940FF2721C601001F52E7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F4940FE2721C601001F52E7 /* GoogleService-Info.plist */; };
 		4F4941012721D872001F52E7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4941002721D872001F52E7 /* User.swift */; };
 		4F4941032721D87D001F52E7 /* BlogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4941022721D87D001F52E7 /* BlogPost.swift */; };
-		4F4941062721DDF7001F52E7 /* PayWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4941052721DDF7001F52E7 /* PayWallViewController.swift */; };
 		4F4941092721E0FD001F52E7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4941082721E0FD001F52E7 /* Extensions.swift */; };
 		4F49410B2721EA11001F52E7 /* SignInHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */; };
 		4F49410D2721F699001F52E7 /* SignUpHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */; };
@@ -54,14 +52,12 @@
 		4F4940ED2721C25E001F52E7 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		4F4940EF2721C26B001F52E7 /* ViewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPostViewController.swift; sourceTree = "<group>"; };
 		4F4940F12721C279001F52E7 /* CreateNewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostViewController.swift; sourceTree = "<group>"; };
-		4F4940F32721C296001F52E7 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		4F4940F52721C2A4001F52E7 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		4F4940F72721C2B5001F52E7 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		4F4940F92721C2C0001F52E7 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		4F4940FE2721C601001F52E7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4F4941002721D872001F52E7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4F4941022721D87D001F52E7 /* BlogPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogPost.swift; sourceTree = "<group>"; };
-		4F4941052721DDF7001F52E7 /* PayWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWallViewController.swift; sourceTree = "<group>"; };
 		4F4941082721E0FD001F52E7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F49410A2721EA10001F52E7 /* SignInHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHeaderView.swift; sourceTree = "<group>"; };
 		4F49410C2721F699001F52E7 /* SignUpHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpHeaderView.swift; sourceTree = "<group>"; };
@@ -165,7 +161,6 @@
 			isa = PBXGroup;
 			children = (
 				4F4941072721E0ED001F52E7 /* Others */,
-				4F4941042721DDDD001F52E7 /* Subscribe */,
 				4F4940FD2721C4DD001F52E7 /* Posts */,
 				4F4940FC2721C4D3001F52E7 /* Auth */,
 				4F4940FB2721C43F001F52E7 /* Core Tabs */,
@@ -176,7 +171,6 @@
 		4F4940E42721C09E001F52E7 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				4F4940F32721C296001F52E7 /* IAPManager.swift */,
 				4F4940F52721C2A4001F52E7 /* DatabaseManager.swift */,
 				4F4940F72721C2B5001F52E7 /* AuthManager.swift */,
 				4F4940F92721C2C0001F52E7 /* StorageManager.swift */,
@@ -211,14 +205,6 @@
 				4F4940F12721C279001F52E7 /* CreateNewPostViewController.swift */,
 			);
 			path = Posts;
-			sourceTree = "<group>";
-		};
-		4F4941042721DDDD001F52E7 /* Subscribe */ = {
-			isa = PBXGroup;
-			children = (
-				4F4941052721DDF7001F52E7 /* PayWallViewController.swift */,
-			);
-			path = Subscribe;
 			sourceTree = "<group>";
 		};
 		4F4941072721E0ED001F52E7 /* Others */ = {
@@ -372,14 +358,12 @@
 				4F4941012721D872001F52E7 /* User.swift in Sources */,
 				4F4940E82721C1DA001F52E7 /* ProfileViewController.swift in Sources */,
 				4F4940F22721C279001F52E7 /* CreateNewPostViewController.swift in Sources */,
-				4F4940F42721C296001F52E7 /* IAPManager.swift in Sources */,
 				4F4940EA2721C232001F52E7 /* TabBarViewController.swift in Sources */,
 				4F4940D027219D2B001F52E7 /* SceneDelegate.swift in Sources */,
 				4F49410B2721EA11001F52E7 /* SignInHeaderView.swift in Sources */,
 				4F4940F02721C26B001F52E7 /* ViewPostViewController.swift in Sources */,
 				4F4941092721E0FD001F52E7 /* Extensions.swift in Sources */,
 				4F4940FA2721C2C0001F52E7 /* StorageManager.swift in Sources */,
-				4F4941062721DDF7001F52E7 /* PayWallViewController.swift in Sources */,
 				4F49411327232557001F52E7 /* CreatePostHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -534,6 +518,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -568,6 +553,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

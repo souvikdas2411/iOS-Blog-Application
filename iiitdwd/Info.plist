@@ -22,8 +22,6 @@
 		</dict>
 	</dict>
 	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleDefault</string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<string>UIStatusBarStyleLightContent</string>
 </dict>
 </plist>
