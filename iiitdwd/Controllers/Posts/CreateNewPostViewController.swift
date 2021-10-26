@@ -10,18 +10,21 @@ import UIKit
 class CreateNewPostViewController: UITabBarController {
     
     private let headerView = CreatePostHeaderView()
-
+        
     // Title field
     private let titleField: UITextField = {
         let field = UITextField()
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
         field.placeholder = "Enter Title"
+        field.textAlignment = .center
         field.autocapitalizationType = .none
         field.autocorrectionType = .yes
         field.keyboardType = .default
-        field.backgroundColor = nil
+        field.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         field.layer.masksToBounds = true
+        field.layer.cornerRadius = 10
+//        field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
@@ -30,11 +33,14 @@ class CreateNewPostViewController: UITabBarController {
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
         field.placeholder = "Enter Tags/Labels ex: Mental Health, Club, Science"
+        field.font = .italicSystemFont(ofSize: 15)
         field.autocapitalizationType = .none
         field.autocorrectionType = .yes
         field.keyboardType = .default
-        field.backgroundColor = nil
+        field.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         field.layer.masksToBounds = true
+        field.layer.cornerRadius = 10
+//        field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
@@ -46,18 +52,22 @@ class CreateNewPostViewController: UITabBarController {
         imageView.clipsToBounds = true
         imageView.image = UIImage(systemName: "text.below.photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .ultraLight))
         imageView.tintColor = .systemPink
-//        imageView.backgroundColor = .white
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     // TextView for post
     private let textView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-        textView.isEditable = true
         textView.dataDetectorTypes = .all
         textView.autocorrectionType = .yes
         textView.font = .systemFont(ofSize: 15)
+        textView.sizeToFit()
+//        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isUserInteractionEnabled = true
+        textView.isScrollEnabled = true
+        
         return textView
     }()
     
@@ -69,36 +79,60 @@ class CreateNewPostViewController: UITabBarController {
         indicator.layer.cornerRadius = 30
         return indicator
     }()
-
+    
     private var selectedHeaderImage: UIImage?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWilHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        
         view.addSubview(headerView)
+        
+        view.addSubview(titleField)
+        view.addSubview(tags)
         view.addSubview(headerImageView)
         view.addSubview(textView)
-        view.addSubview(tags)
-        view.addSubview(titleField)
-        view.addSubview(activityIndicator)
+        
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(didTapHeader))
         headerImageView.addGestureRecognizer(tap)
         configureButtons()
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         headerView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
+        
+
         titleField.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: 50)
+        
+
         tags.frame = CGRect(x: 10, y: titleField.bottom + 5, width: view.width - 20, height: 50)
+        
+
         headerImageView.frame = CGRect(x: 10, y: tags.bottom+5, width: view.width - 20, height: 160)
-        textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom)
+        
+
+        textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom + 10)
+        
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
-
+    
     @objc private func didTapHeader() {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -106,7 +140,7 @@ class CreateNewPostViewController: UITabBarController {
         picker.allowsEditing = true
         present(picker, animated: true)
     }
-
+    
     private func configureButtons() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Post",
@@ -117,7 +151,21 @@ class CreateNewPostViewController: UITabBarController {
         
         navigationItem.rightBarButtonItem?.tintColor = .systemPink
     }
-
+    
+    private func configureDismissButtons() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Done",
+            style: .done,
+            target: self,
+            action: #selector(didTapDismiss)
+        )
+        
+        navigationItem.rightBarButtonItem?.tintColor = .systemPink
+    }
+    
+    @objc private func didTapDismiss(){
+        view.endEditing(true)
+    }
     @objc private func didTapPost() {
         
         // Check data and post
@@ -128,24 +176,24 @@ class CreateNewPostViewController: UITabBarController {
               let email = UserDefaults.standard.string(forKey: "email"),
               !title.trimmingCharacters(in: .whitespaces).isEmpty,
               !body.trimmingCharacters(in: .whitespaces).isEmpty else {
-
-            let alert = UIAlertController(title: "Enter Post Details",
-                                          message: "Please enter a title, body, and select a image to continue.",
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-            present(alert, animated: true)
-            return
-        }
-
+                  
+                  let alert = UIAlertController(title: "Enter Post Details",
+                                                message: "Please enter a title, body, and select a image to continue.",
+                                                preferredStyle: .alert)
+                  alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+                  present(alert, animated: true)
+                  return
+              }
+        
         print("Starting post...")
         
         view.isUserInteractionEnabled = false
         navigationItem.rightBarButtonItem = nil
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-
+        
         let newPostId = UUID().uuidString
-
+        
         // Upload header Image
         StorageManager.shared.uploadBlogHeaderImage(
             email: email,
@@ -170,7 +218,7 @@ class CreateNewPostViewController: UITabBarController {
                     }
                     return
                 }
-
+                
                 // Insert of post into DB
                 DatabaseManager.shared.getUser(email: UserDefaults.standard.value(forKey: "email") as! String){ user in
                     guard let thisUser = user else {
@@ -193,7 +241,7 @@ class CreateNewPostViewController: UITabBarController {
                         text: body,
                         author: thisUser.name
                     )
-
+                    
                     DatabaseManager.shared.insert(blogPost: post, email: email) { [weak self] posted in
                         guard posted else {
                             DispatchQueue.main.async {
@@ -205,19 +253,45 @@ class CreateNewPostViewController: UITabBarController {
                             }
                             return
                         }
-
+                        
                         DispatchQueue.main.async {
                             self?.configureButtons()
                             self?.view.isUserInteractionEnabled = true
                             self?.activityIndicator.isHidden = true
                             self?.activityIndicator.stopAnimating()
                             HapticsManager.shared.vibrate(for: .success)
-                            self?.dismiss(animated: true, completion: nil)
+                            self?.navigationController?.popViewController(animated: true)
                         }
                     }
                 }
             }
         }
+    }
+        
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            configureDismissButtons()
+            
+            if textView.isFirstResponder {
+                textView.backgroundColor = .systemGray
+                textView.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: view.height - keyboardHeight - view.safeAreaInsets.top)
+//                textView.frame = CGRect(x: 10, y: view.top, width: view.width - 20, height: view.height - keyboardHeight)
+            }
+        }
+    }
+    
+    @objc func keyboardWilHide(_ notification: Notification) {
+        
+        configureButtons()
+        
+        if textView.isFirstResponder {
+            textView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+            textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom - view.safeAreaInsets.bottom)
+        }
+        
     }
 }
 
@@ -225,7 +299,7 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate, UINaviga
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[.editedImage] as? UIImage else {

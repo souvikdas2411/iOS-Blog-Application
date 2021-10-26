@@ -280,8 +280,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     private func handleEdit(post: BlogPost){
         let vc = EditPostViewController(post: post)
         vc.title = "Edit Post"
-        let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true)
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func handleDelete(post: BlogPost){

@@ -11,6 +11,7 @@ import WebKit
 
 class ViewPostViewController: UITabBarController {
     
+    
     private let headerView = ViewerHeaderView()
     
     private let post: BlogPost
@@ -130,7 +131,7 @@ class ViewPostViewController: UITabBarController {
         scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         scrollView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.safeAreaInsets.bottom + 5).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: tabBarController?.tabBar.topAnchor ?? view.bottomAnchor).isActive = true
         
         contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
@@ -158,8 +159,6 @@ class ViewPostViewController: UITabBarController {
         postDesc.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         postDesc.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 5).isActive = true
         postDesc.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-//        postDesc.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-//                postDesc.bottomAnchor.constraint(equalTo: moreAboutTheAuthor.topAnchor).isActive = true
         
         contentView.addSubview(moreAboutTheAuthor)
 //        moreAboutTheAuthor.topAnchor.constraint(equalTo: postDesc.bottomAnchor, constant: 5).isActive = true

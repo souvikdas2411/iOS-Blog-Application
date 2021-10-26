@@ -108,8 +108,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         )
         
         tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
-//        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (self.tabBarController?.tabBar.frame.height)!)
-//        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: tableView.contentSize.height)
         
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
@@ -117,8 +115,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc private func didTapCreate() {
         let vc = CreateNewPostViewController()
         vc.title = "Create Post"
-        let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true)
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+//        self.present(vc, animated: true, completion: nil)
     }
     
     @objc private func trendTapped() {
