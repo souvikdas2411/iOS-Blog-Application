@@ -217,4 +217,27 @@ final class DatabaseManager {
         }
         
     }
+    
+    func updatePost(post: BlogPost,
+                    email: String,
+                    completion: @escaping (Bool) -> Void){
+        
+        let path = email
+            .replacingOccurrences(of: "@", with: "_")
+            .replacingOccurrences(of: ".", with: "_")
+        
+        database.collection("users").document(path).collection("posts").document(post.identifier).updateData([
+            "body": post.text,
+            "headerImageUrl": post.headerImageUrl?.absoluteString ?? "",
+            "tags": post.tags,
+            "title": post.title
+        ]) { err in
+            if let err = err {
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+        
+    }
 }

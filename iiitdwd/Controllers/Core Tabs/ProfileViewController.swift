@@ -257,17 +257,18 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let cell = posts[indexPath.row]
         let action = UIContextualAction(style: .normal,
                                         title: "") { [weak self] (action, view, completionHandler) in
-                                            self?.handleMarkAsFavourite()
+            self?.handleEdit(post: cell)
                                             completionHandler(true)
         }
         action.backgroundColor = .systemBlue
         action.image = UIImage(systemName: "pencil.circle.fill")
-        let cell = posts[indexPath.row]
+        let cell2 = posts[indexPath.row]
         let delete = UIContextualAction(style: .normal,
                                         title: "") { [weak self] (action, view, completionHandler) in
-            self?.handleDelete(post: cell)
+            self?.handleDelete(post: cell2)
                                             completionHandler(true)
         }
         delete.backgroundColor = .systemRed
@@ -276,8 +277,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         return UISwipeActionsConfiguration(actions: [action, delete])
     }
     
-    private func handleMarkAsFavourite(){
-        
+    private func handleEdit(post: BlogPost){
+        let vc = EditPostViewController(post: post)
+        vc.title = "Edit Post"
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
     
     private func handleDelete(post: BlogPost){

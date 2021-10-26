@@ -34,6 +34,7 @@
 		4F49411A272333F7001F52E7 /* ViewerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F494119272333F7001F52E7 /* ViewerHeaderView.swift */; };
 		4F49411C2723387B001F52E7 /* ViewControllerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */; };
 		4FB88EA32724653700DB35B4 /* SearchProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB88EA22724653700DB35B4 /* SearchProfileViewController.swift */; };
+		4FE8EE43272830600041402D /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8EE42272830600041402D /* EditPostViewController.swift */; };
 		EA1200AF7EABF2D0876CDE02 /* Pods_iiitdwd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		4F494119272333F7001F52E7 /* ViewerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerHeaderView.swift; sourceTree = "<group>"; };
 		4F49411B2723387B001F52E7 /* ViewControllerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerHeaderView.swift; sourceTree = "<group>"; };
 		4FB88EA22724653700DB35B4 /* SearchProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProfileViewController.swift; sourceTree = "<group>"; };
+		4FE8EE42272830600041402D /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		DC7CEE484454865D5EF383DB /* Pods-iiitdwd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iiitdwd.release.xcconfig"; path = "Target Support Files/Pods-iiitdwd/Pods-iiitdwd.release.xcconfig"; sourceTree = "<group>"; };
 		F8A03E795755F91239ABB393 /* Pods_iiitdwd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iiitdwd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -203,6 +205,7 @@
 			children = (
 				4F4940EF2721C26B001F52E7 /* ViewPostViewController.swift */,
 				4F4940F12721C279001F52E7 /* CreateNewPostViewController.swift */,
+				4FE8EE42272830600041402D /* EditPostViewController.swift */,
 			);
 			path = Posts;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				4F4940E82721C1DA001F52E7 /* ProfileViewController.swift in Sources */,
 				4F4940F22721C279001F52E7 /* CreateNewPostViewController.swift in Sources */,
 				4F4940EA2721C232001F52E7 /* TabBarViewController.swift in Sources */,
+				4FE8EE43272830600041402D /* EditPostViewController.swift in Sources */,
 				4F4940D027219D2B001F52E7 /* SceneDelegate.swift in Sources */,
 				4F49410B2721EA11001F52E7 /* SignInHeaderView.swift in Sources */,
 				4F4940F02721C26B001F52E7 /* ViewPostViewController.swift in Sources */,

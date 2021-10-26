@@ -9,10 +9,10 @@ import Foundation
 
 struct BlogPost {
     let identifier: String
-    let title: String
-    let tags: String
+    var title: String
+    var tags: String
     let timestamp: String
-    let headerImageUrl: URL?
-    let text: String
+    var headerImageUrl: URL?
+    var text: String
     let author: String
 }
