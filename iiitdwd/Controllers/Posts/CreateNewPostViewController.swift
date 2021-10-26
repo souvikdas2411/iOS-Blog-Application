@@ -128,7 +128,7 @@ class CreateNewPostViewController: UITabBarController {
         headerImageView.frame = CGRect(x: 10, y: tags.bottom+5, width: view.width - 20, height: 160)
         
 
-        textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom + 10)
+        textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom+10)
         
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
@@ -268,7 +268,7 @@ class CreateNewPostViewController: UITabBarController {
         }
     }
         
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @objc private func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -283,7 +283,7 @@ class CreateNewPostViewController: UITabBarController {
         }
     }
     
-    @objc func keyboardWilHide(_ notification: Notification) {
+    @objc private func keyboardWilHide(_ notification: Notification) {
         
         configureButtons()
         
