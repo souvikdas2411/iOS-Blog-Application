@@ -24,7 +24,20 @@ class CreateNewPostViewController: UITabBarController {
         field.layer.masksToBounds = true
         return field
     }()
-
+    
+    private let tags: UITextField = {
+        let field = UITextField()
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
+        field.leftViewMode = .always
+        field.placeholder = "Enter Tags/Labels ex: Mental Health, Club, Science"
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .yes
+        field.keyboardType = .default
+        field.backgroundColor = nil
+        field.layer.masksToBounds = true
+        return field
+    }()
+    
     // Image Header
     private let headerImageView: UIImageView = {
         let imageView = UIImageView()
@@ -40,7 +53,6 @@ class CreateNewPostViewController: UITabBarController {
     // TextView for post
     private let textView: UITextView = {
         let textView = UITextView()
-//        textView.backgroundColor = .lightGray
         textView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         textView.isEditable = true
         textView.dataDetectorTypes = .all
@@ -67,6 +79,7 @@ class CreateNewPostViewController: UITabBarController {
         view.addSubview(headerView)
         view.addSubview(headerImageView)
         view.addSubview(textView)
+        view.addSubview(tags)
         view.addSubview(titleField)
         view.addSubview(activityIndicator)
         let tap = UITapGestureRecognizer(target: self,
@@ -80,7 +93,8 @@ class CreateNewPostViewController: UITabBarController {
 
         headerView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         titleField.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: 50)
-        headerImageView.frame = CGRect(x: 10, y: titleField.bottom+5, width: view.width - 20, height: 160)
+        tags.frame = CGRect(x: 10, y: titleField.bottom + 5, width: view.width - 20, height: 50)
+        headerImageView.frame = CGRect(x: 10, y: tags.bottom+5, width: view.width - 20, height: 160)
         textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom)
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
@@ -108,6 +122,7 @@ class CreateNewPostViewController: UITabBarController {
         
         // Check data and post
         guard let title = titleField.text,
+              let tags = tags.text,
               let body = textView.text,
               let headerImage = selectedHeaderImage,
               let email = UserDefaults.standard.string(forKey: "email"),
@@ -172,6 +187,7 @@ class CreateNewPostViewController: UITabBarController {
                     let post = BlogPost(
                         identifier: newPostId,
                         title: title,
+                        tags: tags,
                         timestamp: timestamp,
                         headerImageUrl: headerUrl,
                         text: body,

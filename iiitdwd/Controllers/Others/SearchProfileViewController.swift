@@ -184,13 +184,12 @@ class SearchProfileViewController: UIViewController, UITableViewDelegate, UITabl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
             fatalError()
         }
-        cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
-//        cell.backgroundColor = .separator
+        cell.configure(with: .init(title: post.title, author: post.author, tags: post.tags, desc: post.text, imageUrl: post.headerImageUrl))
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 150
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

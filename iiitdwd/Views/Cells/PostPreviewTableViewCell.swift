@@ -11,12 +11,16 @@ import SDWebImage
 class PostPreviewTableViewCellViewModel {
     let title: String
     let author: String
+    let tags: String
+    let desc: String
     let imageUrl: URL?
     var imageData: Data?
 
-    init(title: String, author: String, imageUrl: URL?) {
+    init(title: String, author: String, tags: String, desc: String, imageUrl: URL?) {
         self.title = title
         self.author = author
+        self.tags = tags
+        self.desc = desc
         self.imageUrl = imageUrl
     }
 }
@@ -46,9 +50,32 @@ class PostPreviewTableViewCell: UITableViewCell {
     private let postAuthor: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15, weight: .ultraLight)
+        label.font = .systemFont(ofSize: 12, weight: .light)
         label.textAlignment = .right
+        label.textColor = .lightGray
+//        label.backgroundColor = .red
+        return label
+    }()
+    
+    private let desc: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.layer.masksToBounds = true
+        label.textAlignment = .left
         label.textColor = .black
+//        label.backgroundColor = .red
+        return label
+    }()
+    
+    private let tags: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .italicSystemFont(ofSize: 15)
+        label.layer.masksToBounds = true
+        label.textAlignment = .left
+        label.textColor = .black
+        label.backgroundColor = .separator
         return label
     }()
     
@@ -68,6 +95,8 @@ class PostPreviewTableViewCell: UITableViewCell {
         contentView.addSubview(activityIndicator)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postAuthor)
+        contentView.addSubview(desc)
+        contentView.addSubview(tags)
     }
 
     required init?(coder: NSCoder) {
@@ -88,16 +117,29 @@ class PostPreviewTableViewCell: UITableViewCell {
                                          width: contentView.height-10,
                                          height: contentView.height-10)
         activityIndicator.layer.cornerRadius = (contentView.height-10)/2
+        
         postTitleLabel.frame = CGRect(
             x: postImageView.right+5,
             y: 5,
             width: contentView.width-5-separatorInset.left-postImageView.width,
-            height: contentView.height/2 - 10
+            height: 25
         )
         postAuthor.frame = CGRect(x: postImageView.right+5,
+                                  y: desc.bottom + 5,
+                                  width: contentView.width-10-separatorInset.left-postImageView.width,
+                                  height: 25)
+        
+        desc.frame = CGRect(x: postImageView.right+5,
                                   y: postTitleLabel.bottom + 5,
                                   width: contentView.width-10-separatorInset.left-postImageView.width,
-                                  height: contentView.height/2 - 10)
+                            height: 50)
+        
+        tags.frame = CGRect(x: postImageView.right+5,
+                                  y: contentView.bottom - 25 - 5,
+                                  width: contentView.width-10-separatorInset.left-postImageView.width,
+                            height: 25)
+//        tags.layer.cornerRadius = 200
+        tags.layer.cornerRadius = 25/5
     }
 
     override func prepareForReuse() {
@@ -110,6 +152,8 @@ class PostPreviewTableViewCell: UITableViewCell {
     func configure(with viewModel: PostPreviewTableViewCellViewModel) {
         postTitleLabel.text = viewModel.title
         postAuthor.text = "by " + viewModel.author
+        tags.text = viewModel.tags
+        desc.text = viewModel.desc
  
         DispatchQueue.main.async {
             self.postImageView.sd_setImage(with: viewModel.imageUrl, placeholderImage:UIImage(contentsOfFile:"launch-img"))

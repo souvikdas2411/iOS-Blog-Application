@@ -230,13 +230,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
             fatalError()
         }
-        cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
+        cell.configure(with: .init(title: post.title, author: post.author, tags: post.tags, desc: post.text, imageUrl: post.headerImageUrl))
         //            cell.backgroundColor = .separator
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 150
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -255,6 +255,45 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         navigationController?.pushViewController(vc, animated: true)
         
         
+    }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .normal,
+                                        title: "") { [weak self] (action, view, completionHandler) in
+                                            self?.handleMarkAsFavourite()
+                                            completionHandler(true)
+        }
+        action.backgroundColor = .systemBlue
+        action.image = UIImage(systemName: "pencil.circle.fill")
+        let cell = posts[indexPath.row]
+        let delete = UIContextualAction(style: .normal,
+                                        title: "") { [weak self] (action, view, completionHandler) in
+            self?.handleDelete(post: cell)
+                                            completionHandler(true)
+        }
+        delete.backgroundColor = .systemRed
+        delete.image = UIImage(systemName: "xmark.bin.circle")
+        
+        return UISwipeActionsConfiguration(actions: [action, delete])
+    }
+    
+    private func handleMarkAsFavourite(){
+        
+    }
+    
+    private func handleDelete(post: BlogPost){
+        
+        let sheet = UIAlertController(title: "Delete", message: "Are you sure you'd like to delete this post?", preferredStyle: .actionSheet)
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            DatabaseManager.shared.deletePost(post: post, email: UserDefaults.standard.value(forKey: "email") as! String){
+                success in
+                guard success else {
+                    return
+                }
+                self.fetchPosts()
+            }
+        }))
+        present(sheet, animated: true)
     }
     
 }

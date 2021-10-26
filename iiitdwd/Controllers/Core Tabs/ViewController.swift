@@ -39,7 +39,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                            forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
         tableView.backgroundColor = nil
         tableView.keyboardDismissMode = .onDrag
-//        tableView.backgroundColor = .red
         return tableView
     }()
     
@@ -87,14 +86,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             controller.searchResultsUpdater = self
             controller.obscuresBackgroundDuringPresentation = false
             controller.searchBar.sizeToFit()
-            controller.searchBar.placeholder = "Search by titles/users"
+            controller.searchBar.placeholder = "Anything!"
+//            controller.searchBar.barStyle = .default
+//            controller.searchBar.barTintColor = .white
             
             tableView.tableHeaderView = controller.searchBar
             
             return controller
         })()
         
-//        tableView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -108,6 +108,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         )
         
         tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (view.safeAreaInsets.bottom + (self.tabBarController?.tabBar.frame.height)!))
+//        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: view.height - (self.tabBarController?.tabBar.frame.height)!)
+//        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.width, height: tableView.contentSize.height)
         
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
@@ -167,18 +169,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
                 
         if (resultSearchController.isActive) {
-            cell.configure(with: .init(title: filteredTableData[indexPath.row].title, author: filteredTableData[indexPath.row].author, imageUrl: filteredTableData[indexPath.row].headerImageUrl))
+            cell.configure(with: .init(title: filteredTableData[indexPath.row].title, author: filteredTableData[indexPath.row].author, tags: filteredTableData[indexPath.row].tags, desc: filteredTableData[indexPath.row].text, imageUrl: filteredTableData[indexPath.row].headerImageUrl))
             return cell
         }
         else {
-            cell.configure(with: .init(title: post.title, author: post.author, imageUrl: post.headerImageUrl))
-//            cell.backgroundColor = .separator
+            cell.configure(with: .init(title: post.title, author: post.author, tags: post.tags, desc: post.text, imageUrl: post.headerImageUrl))
+//            cell.backgroundColor = .blue
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 150
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -204,9 +206,8 @@ extension ViewController {
 func updateSearchResults(for searchController: UISearchController) {
     filteredTableData.removeAll(keepingCapacity: false)
 
-//    let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
     let array = posts.filter {
-        $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased())
+        $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.tags.lowercased().contains(searchController.searchBar.text!.lowercased())
         
     }
     filteredTableData = array

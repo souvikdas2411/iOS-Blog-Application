@@ -10,7 +10,7 @@ import UIKit
 class SignUpHeaderView: UIView {
 
     private let imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "launch-img"))
+        let imageView = UIImageView(image: UIImage(named: "bg-view"))
         imageView.contentMode = .scaleToFill
         imageView.backgroundColor = .systemBackground
         return imageView

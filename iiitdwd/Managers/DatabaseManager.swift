@@ -27,6 +27,7 @@ final class DatabaseManager {
         let data: [String: Any] = [
             "id": blogPost.identifier,
             "title": blogPost.title,
+            "tags": blogPost.tags,
             "body": blogPost.text,
             "created": blogPost.timestamp,
             "headerImageUrl": blogPost.headerImageUrl?.absoluteString ?? "",
@@ -101,6 +102,7 @@ final class DatabaseManager {
                 let posts: [BlogPost] = documents.compactMap({ dictionary in
                     guard let id = dictionary["id"] as? String,
                           let title = dictionary["title"] as? String,
+                          let tags = dictionary["tags"] as? String,
                           let body = dictionary["body"] as? String,
                           let created = dictionary["created"] as? String,
                           let imageUrlString = dictionary["headerImageUrl"] as? String,
@@ -112,6 +114,7 @@ final class DatabaseManager {
                     let post = BlogPost(
                         identifier: id,
                         title: title,
+                        tags: tags,
                         timestamp: created,
                         headerImageUrl: URL(string: imageUrlString),
                         text: body,
@@ -192,6 +195,24 @@ final class DatabaseManager {
             
             dbRef.setData(data) { error in
                 completion(error == nil)
+            }
+        }
+        
+    }
+    
+    func deletePost(post: BlogPost,
+                    email: String,
+                    completion: @escaping (Bool) -> Void){
+        
+        let path = email
+            .replacingOccurrences(of: "@", with: "_")
+            .replacingOccurrences(of: ".", with: "_")
+        
+        database.collection("users").document(path).collection("posts").document(post.identifier).delete() { err in
+            if let err = err {
+                completion(false)
+            } else {
+                completion(true)
             }
         }
         

@@ -59,8 +59,7 @@ class ViewPostViewController: UITabBarController {
         label.font = .systemFont(ofSize: 13, weight: .light)
         label.textColor = .lightGray
         label.isSelectable = true
-        label.isEditable = true
-//        label.numberOfLines = 0
+        label.isEditable = false
         label.backgroundColor = .white
         label.textAlignment = .center
         label.isScrollEnabled = false
@@ -91,12 +90,14 @@ class ViewPostViewController: UITabBarController {
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .separator
+        
         return imageView
     }()
     
     private let moreAboutTheAuthor: UIButton = {
         let button = UIButton()
         button.setTitleColor(.white, for: .normal)
+//        button.setImage(UIImage(systemName: "person"), for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -108,6 +109,7 @@ class ViewPostViewController: UITabBarController {
         
 
         view.addSubview(headerView)
+        
         postImageView.layer.cornerRadius = view.width/5
         postTitle.text = post.title
         postDetails.text = "BY " + post.author.uppercased() + " ON " + post.timestamp

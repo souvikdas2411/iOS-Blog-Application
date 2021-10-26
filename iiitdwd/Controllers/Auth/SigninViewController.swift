@@ -19,7 +19,7 @@ class SigninViewController: UITabBarController {
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
         field.placeholder = "Email Address"
-        field.backgroundColor = .separator
+        field.backgroundColor = .systemGray5
         field.layer.cornerRadius = 8
         field.layer.masksToBounds = true
         return field
@@ -33,7 +33,7 @@ class SigninViewController: UITabBarController {
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         field.leftViewMode = .always
         field.placeholder = "Password"
-        field.backgroundColor = .separator
+        field.backgroundColor = .systemGray5
         field.layer.cornerRadius = 8
         field.layer.masksToBounds = true
         return field
@@ -50,9 +50,9 @@ class SigninViewController: UITabBarController {
     
     private let createAccountButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .separator
+        button.backgroundColor = .systemGray6
         button.setTitle("Sign Up", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 8
         return button
     }()
