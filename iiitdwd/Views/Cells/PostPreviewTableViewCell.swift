@@ -106,13 +106,13 @@ class PostPreviewTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         postImageView.frame = CGRect(
-            x: separatorInset.left,
+            x: 0,
             y: 5,
             width: contentView.height-10,
             height: contentView.height-10
         )
         postImageView.layer.cornerRadius = (contentView.height-10)/5
-        activityIndicator.frame = CGRect(x: separatorInset.left,
+        activityIndicator.frame = CGRect(x: 0,
                                          y: 5,
                                          width: contentView.height-10,
                                          height: contentView.height-10)

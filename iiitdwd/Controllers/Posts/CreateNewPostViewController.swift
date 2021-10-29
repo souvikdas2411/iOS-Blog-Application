@@ -86,19 +86,7 @@ class CreateNewPostViewController: UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWilHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
         
         view.addSubview(headerView)
         
@@ -128,11 +116,32 @@ class CreateNewPostViewController: UITabBarController {
         headerImageView.frame = CGRect(x: 10, y: tags.bottom+5, width: view.width - 20, height: 160)
         
 
-        textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom+10)
+        textView.frame = CGRect(x: 10, y: headerImageView.bottom, width: view.width - 20, height: view.height-headerImageView.bottom+10)
+//        textView.frame = CGRect(x: 10, y: headerImageView.bottom, width: view.width - 20, height: view.height)
         
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWilHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+    }
     @objc private func didTapHeader() {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -278,7 +287,8 @@ class CreateNewPostViewController: UITabBarController {
             if textView.isFirstResponder {
                 textView.backgroundColor = .systemGray
                 textView.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: view.height - keyboardHeight - view.safeAreaInsets.top)
-//                textView.frame = CGRect(x: 10, y: view.top, width: view.width - 20, height: view.height - keyboardHeight)
+//                textView.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: view.height - keyboardHeight - headerImageView.bottom)
+                
             }
         }
     }
@@ -290,6 +300,8 @@ class CreateNewPostViewController: UITabBarController {
         if textView.isFirstResponder {
             textView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
             textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom - view.safeAreaInsets.bottom)
+            
+//            textView.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height)
         }
         
     }

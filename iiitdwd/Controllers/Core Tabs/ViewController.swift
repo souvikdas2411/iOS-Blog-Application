@@ -206,7 +206,7 @@ func updateSearchResults(for searchController: UISearchController) {
     filteredTableData.removeAll(keepingCapacity: false)
 
     let array = posts.filter {
-        $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.tags.lowercased().contains(searchController.searchBar.text!.lowercased())
+        $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.tags.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.text.lowercased().contains(searchController.searchBar.text!.lowercased())
         
     }
     filteredTableData = array

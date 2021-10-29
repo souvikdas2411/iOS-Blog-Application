@@ -23,7 +23,7 @@ class EditPostViewController: UITabBarController {
         fatalError()
     }
     
-
+    
     
     // Title field
     private let titleField: UITextField = {
@@ -38,7 +38,7 @@ class EditPostViewController: UITabBarController {
         field.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         field.layer.masksToBounds = true
         field.layer.cornerRadius = 10
-//        field.translatesAutoresizingMaskIntoConstraints = false
+        //        field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
@@ -54,7 +54,7 @@ class EditPostViewController: UITabBarController {
         field.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         field.layer.masksToBounds = true
         field.layer.cornerRadius = 10
-//        field.translatesAutoresizingMaskIntoConstraints = false
+        //        field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
@@ -66,7 +66,7 @@ class EditPostViewController: UITabBarController {
         imageView.clipsToBounds = true
         imageView.image = UIImage(systemName: "text.below.photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .ultraLight))
         imageView.tintColor = .systemPink
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
+        //        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -78,7 +78,7 @@ class EditPostViewController: UITabBarController {
         textView.autocorrectionType = .yes
         textView.font = .systemFont(ofSize: 15)
         textView.sizeToFit()
-//        textView.translatesAutoresizingMaskIntoConstraints = false
+        //        textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isUserInteractionEnabled = true
         textView.isScrollEnabled = true
         
@@ -105,19 +105,7 @@ class EditPostViewController: UITabBarController {
         headerImageView.sd_setImage(with: post.headerImageUrl, completed: nil)
         postDesc.text = post.text
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
         
         view.addSubview(headerView)
         view.addSubview(titleField)
@@ -134,23 +122,46 @@ class EditPostViewController: UITabBarController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-
+        
         
         headerView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         
-
+        
         titleField.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: 50)
         
-
+        
         tags.frame = CGRect(x: 10, y: titleField.bottom + 5, width: view.width - 20, height: 50)
         
-
+        
         headerImageView.frame = CGRect(x: 10, y: tags.bottom+5, width: view.width - 20, height: 160)
         
-
-        postDesc.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height-headerImageView.bottom+10)
+        
+        postDesc.frame = CGRect(x: 10, y: headerImageView.bottom, width: view.width - 20, height: view.height-headerImageView.bottom+10)
+        //        textView.frame = CGRect(x: 10, y: headerImageView.bottom, width: view.width - 20, height: view.height)
         
         activityIndicator.frame = CGRect(x: view.width/2 - 30, y: view.height/2 - 30, width: 60, height: 60)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func didTapHeader() {
@@ -260,7 +271,7 @@ class EditPostViewController: UITabBarController {
                         self.activityIndicator.isHidden = true
                         self.activityIndicator.stopAnimating()
                         HapticsManager.shared.vibrate(for: .success)
-//                        self.dismiss(animated: true, completion: nil)
+                        //                        self.dismiss(animated: true, completion: nil)
                         self.navigationController?.popViewController(animated: true)
                     }
                 }
@@ -276,8 +287,9 @@ class EditPostViewController: UITabBarController {
             configureDismissButtons()
             
             if postDesc.isFirstResponder {
-                postDesc.backgroundColor = .systemGray
-                postDesc.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.width - 20, height: view.height - keyboardHeight - view.safeAreaInsets.top)
+                self.postDesc.backgroundColor = .systemGray
+                self.postDesc.frame = CGRect(x: 10, y: self.view.safeAreaInsets.top, width: self.view.width - 20, height: self.view.height - keyboardHeight - self.view.safeAreaInsets.top)
+                
             }
             
             
@@ -290,8 +302,10 @@ class EditPostViewController: UITabBarController {
         configureButtons()
         
         if postDesc.isFirstResponder {
-            postDesc.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-            postDesc.frame = CGRect(x: 10, y: headerImageView.bottom+10, width: view.width - 20, height: view.height - headerImageView.bottom - view.safeAreaInsets.bottom)
+            self.postDesc.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+            self.postDesc.frame = CGRect(x: 10, y: self.headerImageView.bottom+10, width: self.view.width - 20, height: self.view.height - self.headerImageView.bottom - self.view.safeAreaInsets.bottom)
+            
+            
         }
         
     }
