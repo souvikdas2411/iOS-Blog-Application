@@ -7,11 +7,13 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
+    
+//    private let scope = ["All", "Blogs", "Events", "Notice"]
     
     private var posts: [BlogPost] = []
     
-    private let headerView = ViewControllerHeaderView()
+    private let headerView = ViewControllerHeaderView() 
     
     private let refreshControl = UIRefreshControl()
     
@@ -87,8 +89,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             controller.obscuresBackgroundDuringPresentation = false
             controller.searchBar.sizeToFit()
             controller.searchBar.placeholder = "Anything!"
-//            controller.searchBar.barStyle = .default
-//            controller.searchBar.barTintColor = .white
+//            controller.searchBar.scopeButtonTitles = ["All", "Blogs", "Events", "Notice"]
+////            controller.searchBar.sco
+//            controller.searchBar.delegate = self
             
             tableView.tableHeaderView = controller.searchBar
             
@@ -202,17 +205,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
 extension ViewController {
 
-func updateSearchResults(for searchController: UISearchController) {
-    filteredTableData.removeAll(keepingCapacity: false)
-
-    let array = posts.filter {
-        $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.tags.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.text.lowercased().contains(searchController.searchBar.text!.lowercased())
+    func updateSearchResults(for searchController: UISearchController) {
+        filteredTableData.removeAll(keepingCapacity: false)
         
+        let array = posts.filter {
+            $0.title.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.author.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.tags.lowercased().contains(searchController.searchBar.text!.lowercased()) || $0.text.lowercased().contains(searchController.searchBar.text!.lowercased())
+            
+        }
+        filteredTableData = array
+        
+        self.tableView.reloadData()
     }
-    filteredTableData = array
-
-    self.tableView.reloadData()
-}
+    
+//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+//        filteredTableData.removeAll(keepingCapacity: false)
+//
+//        print(scope[selectedScope])
+//        let array = posts.filter {
+//            $0.title.lowercased().contains(scope[selectedScope].lowercased())
+//
+//        }
+//        filteredTableData = array
+//
+//        self.tableView.reloadData()
+//    }
 }
 
 

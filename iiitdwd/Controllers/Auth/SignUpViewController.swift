@@ -115,6 +115,7 @@ class SignUpViewController: UITabBarController {
                   let dialogMessage = UIAlertController(title: "Alert", message: "Please fill the details correctly!", preferredStyle: .alert)
                   let ok = UIAlertAction(title: "Try again", style: .default, handler: { (action) -> Void in
                       self.passwordField.text = ""
+                      self.repeatPasswordField.text = ""
                   })
                   dialogMessage.addAction(ok)
                   self.present(dialogMessage, animated: true, completion: nil)

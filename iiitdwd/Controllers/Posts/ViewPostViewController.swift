@@ -175,7 +175,7 @@ class ViewPostViewController: UITabBarController {
     }
     
     @objc private func didTapMore(){
-        let vc = SearchProfileViewController(currentEmail: UserDefaults.standard.value(forKey: "email") as! String)
+        let vc = SearchProfileViewController(currentEmail: post.email)
         vc.navigationItem.largeTitleDisplayMode = .never
         self.navigationController?.pushViewController(vc, animated: true)
         print("USER FOUND")

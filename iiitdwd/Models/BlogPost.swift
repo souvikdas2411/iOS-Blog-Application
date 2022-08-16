@@ -15,4 +15,5 @@ struct BlogPost {
     var headerImageUrl: URL?
     var text: String
     let author: String
+    let email: String
 }

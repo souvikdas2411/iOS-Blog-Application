@@ -248,7 +248,8 @@ class CreateNewPostViewController: UITabBarController {
                         timestamp: timestamp,
                         headerImageUrl: headerUrl,
                         text: body,
-                        author: thisUser.name
+                        author: thisUser.name,
+                        email: thisUser.email
                     )
                     
                     DatabaseManager.shared.insert(blogPost: post, email: email) { [weak self] posted in

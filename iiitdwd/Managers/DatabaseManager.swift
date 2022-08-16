@@ -31,7 +31,8 @@ final class DatabaseManager {
             "body": blogPost.text,
             "created": blogPost.timestamp,
             "headerImageUrl": blogPost.headerImageUrl?.absoluteString ?? "",
-            "author": blogPost.author
+            "author": blogPost.author,
+            "email": email
         ]
         
         database
@@ -106,7 +107,8 @@ final class DatabaseManager {
                           let body = dictionary["body"] as? String,
                           let created = dictionary["created"] as? String,
                           let imageUrlString = dictionary["headerImageUrl"] as? String,
-                          let author = dictionary["author"] as? String else {
+                          let author = dictionary["author"] as? String,
+                          let email = dictionary["email"] as? String else {
                         print("Invalid post fetch conversion")
                         return nil
                     }
@@ -118,7 +120,8 @@ final class DatabaseManager {
                         timestamp: created,
                         headerImageUrl: URL(string: imageUrlString),
                         text: body,
-                        author: author
+                        author: author,
+                        email: email
                     )
                     return post
                 })
